@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useSidebar } from '../composables/useSidebar'
+import SidebarMenu from './SidebarMenu.vue'
+import { useRoute } from 'vue-router'
 
 const { isOpen } = useSidebar()
 const activeClass = ref(
@@ -195,6 +197,7 @@ const inactiveClass = ref(
 
           <span class="mx-4">Blank</span>
         </router-link>
+        <SidebarMenu /> 
       </nav>
     </div>
   </div>
