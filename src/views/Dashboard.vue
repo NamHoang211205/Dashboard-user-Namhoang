@@ -32,7 +32,7 @@ const users = ref<User[]>([...Array(10).keys()].map(() => testUser))
       <div class="flex flex-wrap -mx-6">
         <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
           <div
-            class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm"
+            class="flex item-center px-5 py-6 bg-white rounded-md shadow-sm"
           >
             <div class="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
               <svg
@@ -191,7 +191,7 @@ const users = ref<User[]>([...Array(10).keys()].map(() => testUser))
 
             <tbody class="bg-white">
               <tr v-for="(u, index) in users" :key="index">
-                <td
+                <td 
                   class="px-6 py-4 border-b border-gray-200 whitespace-nowrap"
                 >
                   <div class="flex items-center">
