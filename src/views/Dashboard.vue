@@ -108,7 +108,7 @@ const systems = [
                 <th class="border px-4 py-3 w-12">No.</th>
                 <th class="border px-4 py-3">System</th>
                 <th class="border px-4 py-3">Service Package</th>
-                <th class="border px-4 py-3">User limit</th>
+                <th class="border px-4 py-3">User limit</th>  
                 <th class="border px-4 py-3">Actual user</th>
               </tr>
             </thead>
