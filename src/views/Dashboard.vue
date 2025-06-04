@@ -1,249 +1,124 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-interface User {
-  name: string
-  email: string
-  title: string
-  title2: string
-  status: string
-  role: string
-}
+const form = ref({
+  companyName: 'Lotte Data Communication',
+  abbrevName: 'LDCC',
+  taxCode: '12345678910',
+  address: 'Floor 7, UOA Tower, No.6 Tan Trao Street, Tan Phu Ward, District 7, HCMC',
+  adminUsername: 'admindcc',
+  emailDomain: '@lotte.vn',
+  contactPoint: 'Nguyen Van A',
+  updateDate: '023/12/12 12:00',
+})
 
-const testUser: User = {
-  name: 'John Doe',
-  email: 'john@example.com',
-  title: 'Software Engineer',
-  title2: 'Web dev',
-  status: 'Active',
-  role: 'Owner',
-}
-
-const users = ref<User[]>([...Array(10).keys()].map(() => testUser))
+const systems = [
+  {
+    system: 'Group Ware',
+    servicePackage: 'Basic package',
+    userLimit: '1000',
+    actualUser: '600',
+  },
+  {
+    system: 'HRM',
+    servicePackage: 'Premium package',
+    userLimit: 'Unlimited',
+    actualUser: '500',
+  },
+  {
+    system: 'L-Book',
+    servicePackage: 'Basic package',
+    userLimit: '1000',
+    actualUser: '500',
+  },
+]
 </script>
 
 <template>
-  <div>
-    <h3 class="text-3xl font-medium text-gray-700">
-      Dashboard
-    </h3>
-
-    <div class="mt-4">
-      <div class="flex flex-wrap -mx-6">
-        <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
-          <div
-            class="flex item-center px-5 py-6 bg-white rounded-md shadow-sm"
-          >
-            <div class="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
-              <svg
-                class="w-8 h-8 text-white"
-                viewBox="0 0 28 30"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M18.2 9.08889C18.2 11.5373 16.3196 13.5222 14 13.5222C11.6804 13.5222 9.79999 11.5373 9.79999 9.08889C9.79999 6.64043 11.6804 4.65556 14 4.65556C16.3196 4.65556 18.2 6.64043 18.2 9.08889Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M25.2 12.0444C25.2 13.6768 23.9464 15 22.4 15C20.8536 15 19.6 13.6768 19.6 12.0444C19.6 10.4121 20.8536 9.08889 22.4 9.08889C23.9464 9.08889 25.2 10.4121 25.2 12.0444Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M19.6 22.3889C19.6 19.1243 17.0927 16.4778 14 16.4778C10.9072 16.4778 8.39999 19.1243 8.39999 22.3889V26.8222H19.6V22.3889Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M8.39999 12.0444C8.39999 13.6768 7.14639 15 5.59999 15C4.05359 15 2.79999 13.6768 2.79999 12.0444C2.79999 10.4121 4.05359 9.08889 5.59999 9.08889C7.14639 9.08889 8.39999 10.4121 8.39999 12.0444Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M22.4 26.8222V22.3889C22.4 20.8312 22.0195 19.3671 21.351 18.0949C21.6863 18.0039 22.0378 17.9556 22.4 17.9556C24.7197 17.9556 26.6 19.9404 26.6 22.3889V26.8222H22.4Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M6.64896 18.0949C5.98058 19.3671 5.59999 20.8312 5.59999 22.3889V26.8222H1.39999V22.3889C1.39999 19.9404 3.2804 17.9556 5.59999 17.9556C5.96219 17.9556 6.31367 18.0039 6.64896 18.0949Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-
-            <div class="mx-5">
-              <h4 class="text-2xl font-semibold text-gray-700">
-                8,282
-              </h4>
-              <div class="text-gray-500">
-                New Users
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
-          <div
-            class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm"
-          >
-            <div class="p-3 bg-blue-600 bg-opacity-75 rounded-full">
-              <svg
-                class="w-8 h-8 text-white"
-                viewBox="0 0 28 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.19999 1.4C3.4268 1.4 2.79999 2.02681 2.79999 2.8C2.79999 3.57319 3.4268 4.2 4.19999 4.2H5.9069L6.33468 5.91114C6.33917 5.93092 6.34409 5.95055 6.34941 5.97001L8.24953 13.5705L6.99992 14.8201C5.23602 16.584 6.48528 19.6 8.97981 19.6H21C21.7731 19.6 22.4 18.9732 22.4 18.2C22.4 17.4268 21.7731 16.8 21 16.8H8.97983L10.3798 15.4H19.6C20.1303 15.4 20.615 15.1004 20.8521 14.6261L25.0521 6.22609C25.2691 5.79212 25.246 5.27673 24.991 4.86398C24.7357 4.45123 24.2852 4.2 23.8 4.2H8.79308L8.35818 2.46044C8.20238 1.83722 7.64241 1.4 6.99999 1.4H4.19999Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M22.4 23.1C22.4 24.2598 21.4598 25.2 20.3 25.2C19.1403 25.2 18.2 24.2598 18.2 23.1C18.2 21.9402 19.1403 21 20.3 21C21.4598 21 22.4 21.9402 22.4 23.1Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M9.1 25.2C10.2598 25.2 11.2 24.2598 11.2 23.1C11.2 21.9402 10.2598 21 9.1 21C7.9402 21 7 21.9402 7 23.1C7 24.2598 7.9402 25.2 9.1 25.2Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-
-            <div class="mx-5">
-              <h4 class="text-2xl font-semibold text-gray-700">
-                200,521
-              </h4>
-              <div class="text-gray-500">
-                Total Orders
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
-          <div
-            class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm"
-          >
-            <div class="p-3 bg-pink-600 bg-opacity-75 rounded-full">
-              <svg
-                class="w-8 h-8 text-white"
-                viewBox="0 0 28 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6.99998 11.2H21L22.4 23.8H5.59998L6.99998 11.2Z"
-                  fill="currentColor"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M9.79999 8.4C9.79999 6.08041 11.6804 4.2 14 4.2C16.3196 4.2 18.2 6.08041 18.2 8.4V12.6C18.2 14.9197 16.3196 16.8 14 16.8C11.6804 16.8 9.79999 14.9197 9.79999 12.6V8.4Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-              </svg>
-            </div>
-
-            <div class="mx-5">
-              <h4 class="text-2xl font-semibold text-gray-700">
-                215,542
-              </h4>
-              <div class="text-gray-500">
-                Available Products
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="p-8 bg-white shadow rounded-lg">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-semibold text-gray-900">Company Information</h2>
+      <button
+        class="flex items-center gap-2 px-4 py-2 text-sm text-blue-600 border border-gray-600 rounded hover:bg-blue-50">
+        <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M2.45603 1.79065L2.79652 2.4589L2.79652 2.4589L2.45603 1.79065ZM1.29065 2.95603L0.622395 2.61553L0.622394 2.61553L1.29065 2.95603ZM11.544 13.2094L11.8845 13.8776L11.544 13.2094ZM12.7094 12.044L12.0411 11.7035L12.7094 12.044ZM2.45603 13.2094L2.79652 12.5411L2.45603 13.2094ZM1.29065 12.044L1.9589 11.7035H1.9589L1.29065 12.044ZM13.75 7.5C13.75 7.08579 13.4142 6.75 13 6.75C12.5858 6.75 12.25 7.08579 12.25 7.5H13.75ZM7 2.25C7.41421 2.25 7.75 1.91421 7.75 1.5C7.75 1.08579 7.41421 0.75 7 0.75V2.25ZM7.16882 6.49773L7.88033 6.7349V6.7349L7.16882 6.49773ZM7.47734 5.57214L6.76583 5.33497L6.76583 5.33497L7.47734 5.57214ZM7.7957 5.05703L8.32603 5.58737L8.32603 5.58736L7.7957 5.05703ZM10.8703 1.98247L10.3399 1.45214L10.3399 1.45214L10.8703 1.98247ZM12.5175 3.62974L13.0479 4.16007V4.16007L12.5175 3.62974ZM9.44297 6.7043L8.91264 6.17397L8.91263 6.17397L9.44297 6.7043ZM8.92786 7.02266L9.16503 7.73417H9.16503L8.92786 7.02266ZM8.00227 7.33118L8.23944 8.0427L8.23945 8.0427L8.00227 7.33118ZM9.2741 6.86192L9.72578 7.46065L9.72578 7.46065L9.2741 6.86192ZM9.14435 6.94211L8.81082 6.27035L8.81082 6.27035L9.14435 6.94211ZM12.5175 1.98247L11.9872 2.5128V2.5128L12.5175 1.98247ZM12.9144 2.4404L13.5864 2.10739V2.10739L12.9144 2.4404ZM12.9144 3.17181L13.5864 3.50483V3.50483L12.9144 3.17181ZM11.3282 1.58564L11.6612 2.25766V2.25766L11.3282 1.58564ZM12.0596 1.58564L11.7266 2.25766L11.7266 2.25766L12.0596 1.58564ZM7.55789 5.35565L8.22965 5.68918V5.68918L7.55789 5.35565ZM7.63808 5.2259L7.03935 4.77422V4.77422L7.63808 5.2259ZM7.01533 7.2351L7.72176 6.98319L7.01533 7.2351ZM7.2649 7.48467L7.013 8.1911L7.2649 7.48467ZM5.26667 13.5V14.25H8.73333V13.5V12.75H5.26667V13.5ZM1 5.76667H0.25V9.23333H1H1.75V5.76667H1ZM5.26667 1.5V0.75C4.53231 0.75 3.93643 0.749417 3.45413 0.788822C2.96308 0.828943 2.5241 0.914219 2.11553 1.12239L2.45603 1.79065L2.79652 2.4589C2.95838 2.37643 3.17799 2.31638 3.57628 2.28384C3.98333 2.25058 4.50755 2.25 5.26667 2.25V1.5ZM1 5.76667H1.75C1.75 5.00755 1.75058 4.48333 1.78384 4.07628C1.81638 3.67799 1.87643 3.45838 1.9589 3.29652L1.29065 2.95603L0.622394 2.61553C0.414219 3.0241 0.328943 3.46308 0.288822 3.95413C0.249417 4.43643 0.25 5.03231 0.25 5.76667H1ZM2.45603 1.79065L2.11553 1.12239C1.47264 1.44996 0.949962 1.97265 0.622395 2.61553L1.29065 2.95603L1.9589 3.29652C2.14266 2.93587 2.43587 2.64266 2.79652 2.4589L2.45603 1.79065ZM8.73333 13.5V14.25C9.46769 14.25 10.0636 14.2506 10.5459 14.2112C11.0369 14.1711 11.4759 14.0858 11.8845 13.8776L11.544 13.2094L11.2035 12.5411C11.0416 12.6236 10.822 12.6836 10.4237 12.7162C10.0167 12.7494 9.49245 12.75 8.73333 12.75V13.5ZM13 9.23333H12.25C12.25 9.99245 12.2494 10.5167 12.2162 10.9237C12.1836 11.322 12.1236 11.5416 12.0411 11.7035L12.7094 12.044L13.3776 12.3845C13.5858 11.9759 13.6711 11.5369 13.7112 11.0459C13.7506 10.5636 13.75 9.9677 13.75 9.23333H13ZM11.544 13.2094L11.8845 13.8776C12.5274 13.55 13.05 13.0274 13.3776 12.3845L12.7094 12.044L12.0411 11.7035C11.8573 12.0641 11.5641 12.3573 11.2035 12.5411L11.544 13.2094ZM5.26667 13.5V12.75C4.50755 12.75 3.98333 12.7494 3.57628 12.7162C3.17799 12.6836 2.95838 12.6236 2.79652 12.5411L2.45603 13.2094L2.11553 13.8776C2.5241 14.0858 2.96308 14.1711 3.45413 14.2112C3.93643 14.2506 4.53231 14.25 5.26667 14.25V13.5ZM1 9.23333H0.25C0.25 9.96769 0.249417 10.5636 0.288822 11.0459C0.328943 11.5369 0.414219 11.9759 0.622394 12.3845L1.29065 12.044L1.9589 11.7035C1.87643 11.5416 1.81638 11.322 1.78384 10.9237C1.75058 10.5167 1.75 9.99245 1.75 9.23333H1ZM2.45603 13.2094L2.79652 12.5411C2.43587 12.3573 2.14266 12.0641 1.9589 11.7035L1.29065 12.044L0.622394 12.3845C0.949962 13.0274 1.47265 13.55 2.11553 13.8776L2.45603 13.2094ZM13 9.23333H13.75V7.5H13H12.25V9.23333H13ZM5.26667 1.5V2.25H7V1.5V0.75H5.26667V1.5ZM7.16882 6.49773L7.88033 6.7349L8.18886 5.80931L7.47734 5.57214L6.76583 5.33497L6.4573 6.26055L7.16882 6.49773ZM7.7957 5.05703L8.32603 5.58736L11.4006 2.5128L10.8703 1.98247L10.3399 1.45214L7.26537 4.5267L7.7957 5.05703ZM12.5175 3.62974L11.9872 3.09941L8.91264 6.17397L9.44297 6.7043L9.9733 7.23463L13.0479 4.16007L12.5175 3.62974ZM8.92786 7.02266L8.69069 6.31114L7.7651 6.61967L8.00227 7.33118L8.23945 8.0427L9.16503 7.73417L8.92786 7.02266ZM9.44297 6.7043L8.91263 6.17397C8.86887 6.21774 8.84645 6.24007 8.82941 6.25619C8.81547 6.26938 8.81574 6.26822 8.82242 6.26318L9.2741 6.86192L9.72578 7.46065C9.82283 7.38744 9.90541 7.30252 9.9733 7.23463L9.44297 6.7043ZM8.92786 7.02266L9.16503 7.73417C9.25611 7.70381 9.369 7.66793 9.47788 7.61386L9.14435 6.94211L8.81082 6.27035C8.81832 6.26663 8.81948 6.26691 8.80144 6.27348C8.77941 6.2815 8.7494 6.29157 8.69069 6.31114L8.92786 7.02266ZM9.2741 6.86192L8.82242 6.26318C8.81879 6.26592 8.81491 6.26832 8.81082 6.27035L9.14435 6.94211L9.47788 7.61386C9.56507 7.57057 9.64806 7.51928 9.72578 7.46065L9.2741 6.86192ZM12.5175 1.98247L11.9872 2.5128C12.1055 2.63107 12.172 2.69797 12.2182 2.74973C12.2609 2.79757 12.2548 2.79853 12.2423 2.77341L12.9144 2.4404L13.5864 2.10739C13.4579 1.84819 13.2296 1.63387 13.0479 1.45214L12.5175 1.98247ZM12.5175 3.62974L13.0479 4.16007C13.2296 3.97835 13.4579 3.76402 13.5864 3.50483L12.9144 3.17181L12.2423 2.8388C12.2548 2.81368 12.2609 2.81464 12.2182 2.86248C12.172 2.91425 12.1055 2.98115 11.9872 3.09941L12.5175 3.62974ZM12.9144 2.4404L12.2423 2.77341C12.2526 2.79401 12.2526 2.8182 12.2423 2.8388L12.9144 3.17181L13.5864 3.50483C13.8045 3.06456 13.8045 2.54766 13.5864 2.10739L12.9144 2.4404ZM10.8703 1.98247L11.4006 2.5128C11.5188 2.39454 11.5857 2.32804 11.6375 2.28182C11.6854 2.2391 11.6863 2.24521 11.6612 2.25766L11.3282 1.58564L10.9952 0.913628C10.736 1.04207 10.5216 1.27042 10.3399 1.45214L10.8703 1.98247ZM12.5175 1.98247L13.0479 1.45214C12.8661 1.27042 12.6518 1.04207 12.3926 0.913628L12.0596 1.58564L11.7266 2.25766C11.7015 2.24521 11.7024 2.2391 11.7503 2.28182C11.802 2.32804 11.8689 2.39454 11.9872 2.5128L12.5175 1.98247ZM11.3282 1.58564L11.6612 2.25766C11.6818 2.24745 11.706 2.24745 11.7266 2.25766L12.0596 1.58564L12.3926 0.913628C11.9523 0.695457 11.4354 0.695457 10.9952 0.913628L11.3282 1.58564ZM7.47734 5.57214L8.18886 5.80931C8.20843 5.7506 8.2185 5.72059 8.22652 5.69856C8.23309 5.68052 8.23337 5.68168 8.22965 5.68918L7.55789 5.35565L6.88614 5.02212C6.83207 5.131 6.79619 5.2439 6.76583 5.33497L7.47734 5.57214ZM7.7957 5.05703L7.26537 4.5267C7.19748 4.59459 7.11256 4.67717 7.03935 4.77422L7.63808 5.2259L8.23682 5.67758C8.23178 5.68426 8.23061 5.68453 8.24381 5.67059C8.25993 5.65355 8.28226 5.63113 8.32603 5.58737L7.7957 5.05703ZM7.55789 5.35565L8.22965 5.68918C8.23168 5.6851 8.23408 5.68121 8.23682 5.67758L7.63808 5.2259L7.03935 4.77422C6.98072 4.85193 6.92943 4.93492 6.88613 5.02212L7.55789 5.35565ZM7.16882 6.49773L6.4573 6.26055C6.39497 6.44756 6.33104 6.63698 6.29377 6.79557C6.25912 6.94302 6.20897 7.20675 6.3089 7.487L7.01533 7.2351L7.72176 6.98319C7.74946 7.06085 7.75077 7.1226 7.74978 7.14856C7.74893 7.17092 7.74612 7.1722 7.754 7.1387C7.76155 7.10655 7.77467 7.05982 7.79694 6.98904C7.81906 6.91877 7.8462 6.83727 7.88033 6.7349L7.16882 6.49773ZM8.00227 7.33118L7.76511 6.61967C7.66273 6.6538 7.58123 6.68094 7.51096 6.70306C7.44018 6.72533 7.39345 6.73845 7.3613 6.746C7.32779 6.75388 7.32908 6.75107 7.35144 6.75022C7.37739 6.74923 7.43915 6.75054 7.51681 6.77824L7.2649 7.48467L7.013 8.1911C7.29325 8.29103 7.55698 8.24088 7.70443 8.20623C7.86302 8.16896 8.05244 8.10503 8.23944 8.0427L8.00227 7.33118ZM7.01533 7.2351L6.3089 7.487C6.42604 7.81547 6.68452 8.07396 7.013 8.1911L7.2649 7.48467L7.51681 6.77824C7.61243 6.81233 7.68767 6.88758 7.72176 6.98319L7.01533 7.2351Z"
+            fill="#3559F2" />
+        </svg>
+        Edit Company
+      </button>
     </div>
 
-    <div class="mt-8" />
+    <!-- Grid Form -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Company Name -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Company Name:</p>
+        <p>{{ form.companyName }}</p>
+      </div>
 
-    <div class="flex flex-col mt-8">
-      <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-        <div
-          class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
-        >
-          <table class="min-w-full">
-            <thead>
+      <!-- Abbreviated Name -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Abbreviated Name:</p>
+        <p>{{ form.abbrevName }}</p>
+      </div>
+
+      <!-- Tax Code -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Tax Code:</p>
+        <p>{{ form.taxCode }}</p>
+      </div>
+
+      <!-- Address -->
+      <div class="md:col-span-2 lg:col-span-2">
+        <p class="text-sm font-semibold text-gray-600">Address:</p>
+        <p>{{ form.address }}</p>
+      </div>
+
+      <!-- Contact Point -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Contact Point:</p>
+        <p>{{ form.contactPoint }}</p>
+      </div>
+
+      <!-- Super Admin -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Super Admin's Username:</p>
+        <p>{{ form.adminUsername }}</p>
+      </div>
+
+      <!-- Email Domain -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Email Domain:</p>
+        <p>{{ form.emailDomain }}</p>
+      </div>
+
+      <!-- Update Date -->
+      <div>
+        <p class="text-sm font-semibold text-gray-600">Update Date:</p>
+        <p>{{ form.updateDate }}</p>
+      </div>
+
+      <div class="col-span-full">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">System list:</h3>
+        <div class="overflow-x-auto border rounded-lg">
+          <table class="w-full text-sm text-left border-collapse table-fixed">
+            <thead class="bg-gray-100 text-gray-900 font-semibold">
               <tr>
-                <th
-                  class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-                >
-                  Name
-                </th>
-                <th
-                  class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-                >
-                  Title
-                </th>
-                <th
-                  class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-                >
-                  Status
-                </th>
-                <th
-                  class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-                >
-                  Role
-                </th>
-                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50" />
+                <th class="border px-4 py-3 w-12">No.</th>
+                <th class="border px-4 py-3">System</th>
+                <th class="border px-4 py-3">Service Package</th>
+                <th class="border px-4 py-3">User limit</th>
+                <th class="border px-4 py-3">Actual user</th>
               </tr>
             </thead>
-
             <tbody class="bg-white">
-              <tr v-for="(u, index) in users" :key="index">
-                <td 
-                  class="px-6 py-4 border-b border-gray-200 whitespace-nowrap"
-                >
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0 w-10 h-10">
-                      <img
-                        class="w-10 h-10 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      >
-                    </div>
-
-                    <div class="ml-4">
-                      <div class="text-sm font-medium leading-5 text-gray-900">
-                        {{ u.name }}
-                      </div>
-                      <div class="text-sm leading-5 text-gray-500">
-                        {{ u.email }}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-
-                <td
-                  class="px-6 py-4 border-b border-gray-200 whitespace-nowrap"
-                >
-                  <div class="text-sm leading-5 text-gray-900">
-                    {{ u.title }}
-                  </div>
-                  <div class="text-sm leading-5 text-gray-500">
-                    {{ u.title2 }}
-                  </div>
-                </td>
-
-                <td
-                  class="px-6 py-4 border-b border-gray-200 whitespace-nowrap"
-                >
-                  <span
-                    class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"
-                  >{{ u.status }}</span>
-                </td>
-
-                <td
-                  class="px-6 py-4 text-sm leading-5 text-gray-500 border-b border-gray-200 whitespace-nowrap"
-                >
-                  {{ u.role }}
-                </td>
-
-                <td
-                  class="px-6 py-4 text-sm font-medium leading-5 text-right border-b border-gray-200 whitespace-nowrap"
-                >
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                </td>
+              <tr v-for="(item, index) in systems" :key="index">
+                <td class="border px-4 py-3 text-center">{{ index + 1 }}</td>
+                <td class="border px-4 py-3">{{ item.system }}</td>
+                <td class="border px-4 py-3">{{ item.servicePackage }}</td>
+                <td class="border px-4 py-3">{{ item.userLimit }}</td>
+                <td class="border px-4 py-3">{{ item.actualUser }}</td>
               </tr>
             </tbody>
           </table>
