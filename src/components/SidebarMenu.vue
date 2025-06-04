@@ -53,11 +53,13 @@ const handleMenu1Click = () => {
 
   <!-- Submenu Items -->
   <div v-show="subMenuOpen" class="mt-2 space-y-1">
-    <router-link v-for="n in 9" :key="n" :to="`/menu ${n}`"
+    <router-link v-for="n in 9" 
+    :key="n" :to="
+    `/menu ${n + 1}`"
       class="flex items-center px-6 py-2 duration-200 border-l-4 cursor-pointer" :class="router.currentRoute.value.name === `Menu ${n}`
         ? 'bg-gray-600 bg-opacity-25 text-gray-100 border-gray-100'
         : 'border-gray-900 text-gray-500 hover:bg-gray-600 hover:bg-opacity-25 hover:text-gray-100'">
-      <span class="mx-4">Menu {{ n }}</span>
+      <span class="mx-4">Menu {{ n + 1}}</span>
     </router-link>
 
   </div>
