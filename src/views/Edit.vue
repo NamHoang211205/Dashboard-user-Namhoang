@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const route = useRouter()
 const form = ref({
     companyName: '',
     abbrevName: '',
@@ -11,6 +13,11 @@ const form = ref({
     contactPoint: '',
     updateDate: '',
 })
+
+function backTopage() {
+    route.push('/dashboard')
+    console.log('Back to dashboard')
+}
 </script>
 
 <template>
@@ -19,7 +26,8 @@ const form = ref({
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-semibold text-gray-900">Company Information</h2>
                 <div class="flex items-center gap-x-4">
-                    <button class="px-6 py-2 text-sm font-semibold text-blue-600 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 shadow-sm">
+                    <button @click="backTopage"
+                     class="px-6 py-2 text-sm font-semibold text-blue-600 bg-white border border-gray-200 rounded-lg hover:bg-blue-50 shadow-sm">
                         Back
                     </button>
                     <button class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 shadow-sm">
