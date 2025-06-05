@@ -10,6 +10,7 @@ import Modal from './views/Modal.vue'
 import Card from './views/Card.vue'
 import Blank from './views/Blank.vue'
 import SidebarMenu from './components/SidebarMenu.vue'
+import Edit from './views/Edit.vue'
 
 
 const routes: RouteRecordRaw[] = [
@@ -23,6 +24,11 @@ const routes: RouteRecordRaw[] = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: Edit,
   },
   {
     path: '/forms',
