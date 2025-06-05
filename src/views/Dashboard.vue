@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 
 const form = ref({
-  companyName: 'Lotte Data Communication',
-  abbrevName: 'LDCC',
+  companyName: null,
+  abbrevName: null,
   taxCode: '12345678910',
   address: 'Floor 7, UOA Tower, No.6 Tan Trao Street, Tan Phu Ward, District 7, HCMC',
   adminUsername: 'admindcc',
@@ -32,6 +32,11 @@ const systems = [
     actualUser: '500',
   },
 ]
+ // function to handle empty values
+  // if the value is null or undefined, return '---'
+  function FormOutput(value: unknown) {
+    return value ? value : '---';
+  }
 </script>
 
 <template>
@@ -39,6 +44,7 @@ const systems = [
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl font-semibold text-gray-900">Company Information</h2>
       <button
+        
         class="flex items-center gap-2 px-4 py-2 text-sm text-blue-600 border border-gray-600 rounded hover:bg-blue-50">
         <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -54,13 +60,13 @@ const systems = [
       <!-- Company Name -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Company Name:</p>
-        <p>{{ form.companyName }}</p>
+        <p>{{ FormOutput(form.companyName) }}</p>
       </div>
 
       <!-- Abbreviated Name -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Abbreviated Name:</p>
-        <p>{{ form.abbrevName }}</p>
+        <p>{{ FormOutput(form.abbrevName) }}</p>
       </div>
 
       <!-- Tax Code -->
