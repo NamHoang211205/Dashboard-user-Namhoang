@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+
 
 const router = useRouter()
 
 const form = ref({
   companyName: null,
   abbrevName: null,
-  taxCode: '12345678910',
-  address: 'Floor 7, UOA Tower, No.6 Tan Trao Street, Tan Phu Ward, District 7, HCMC',
-  adminUsername: 'admindcc',
-  emailDomain: '@lotte.vn',
-  contactPoint: 'Nguyen Van A',
-  updateDate: '023/12/12 12:00',
+  taxCode: null,
+  address: null,
+  adminUsername: null,
+  emailDomain: null,
+  contactPoint: null,
+  updateDate: null,
 })
 
 const systems = [
@@ -35,11 +36,21 @@ const systems = [
     actualUser: '500',
   },
 ]
+// Load saved company information from localStorage when the component is mounted
+onMounted(() => {
+    const raw = localStorage.getItem('companyInfo')
+    if (raw) {
+      form.value = JSON.parse(raw)
+    }
+  })
  // function to handle empty values
   // if the value is null or undefined, return '---'
-  function FormOutput(value: unknown) {
-    return value ? value : '---';
-  }
+  // function FormOutput(value: unknown) {
+  //   return value ? value : '---';
+  // }
+  // function Output(value: unknown) {
+  //   return value ? value : 'N/A';
+  // }
   
   function goToEditPage() {
     console.log('Navigating to edit page...')
@@ -67,13 +78,13 @@ const systems = [
       <!-- Company Name -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Company Name:</p>
-        <p>{{ FormOutput(form.companyName) }}</p>
+        <p>{{form.companyName }}</p>
       </div>
 
       <!-- Abbreviated Name -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Abbreviated Name:</p>
-        <p>{{ FormOutput(form.abbrevName) }}</p>
+        <p>{{ form.abbrevName }}</p>
       </div>
 
       <!-- Tax Code -->
