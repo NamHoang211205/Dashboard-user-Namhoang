@@ -43,14 +43,14 @@ onMounted(() => {
       form.value = JSON.parse(raw)
     }
   })
- // function to handle empty values
-  // if the value is null or undefined, return '---'
-  // function FormOutput(value: unknown) {
-  //   return value ? value : '---';
-  // }
-  // function Output(value: unknown) {
-  //   return value ? value : 'N/A';
-  // }
+//  function to handle empty values
+//  if the value is null or undefined, return '---'
+  function FormOutput(value: unknown) {
+    return value ? value : '---';
+  }
+  function Output(value: unknown) {
+    return value ? value : 'N/A';
+  }
   
   function goToEditPage() {
     console.log('Navigating to edit page...')
@@ -78,43 +78,43 @@ onMounted(() => {
       <!-- Company Name -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Company Name:</p>
-        <p>{{form.companyName }}</p>
+        <p>{{ FormOutput(form.companyName) }}</p>
       </div>
 
       <!-- Abbreviated Name -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Abbreviated Name:</p>
-        <p>{{ form.abbrevName }}</p>
+        <p>{{ FormOutput(form.abbrevName) }}</p>
       </div>
 
       <!-- Tax Code -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Tax Code:</p>
-        <p>{{ form.taxCode }}</p>
+        <p>{{ FormOutput(form.taxCode) }}</p>
       </div>
 
       <!-- Address -->
       <div class="md:col-span-2 lg:col-span-2">
         <p class="text-sm font-semibold text-gray-600">Address:</p>
-        <p>{{ form.address }}</p>
+        <p>{{ FormOutput(form.address) }}</p>
       </div>
 
       <!-- Contact Point -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Contact Point:</p>
-        <p>{{ form.contactPoint }}</p>
+        <p>{{ FormOutput(form.contactPoint) }}</p>
       </div>
 
       <!-- Super Admin -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Super Admin's Username:</p>
-        <p>{{ form.adminUsername }}</p>
+        <p>{{ FormOutput(form.adminUsername) }}</p>
       </div>
 
       <!-- Email Domain -->
       <div>
         <p class="text-sm font-semibold text-gray-600">Email Domain:</p>
-        <p>{{ form.emailDomain }}</p>
+        <p>{{ FormOutput(form.emailDomain) }}</p>
       </div>
 
       <!-- Update Date -->

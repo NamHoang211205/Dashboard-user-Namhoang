@@ -3,7 +3,8 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const route = useRouter()
-
+const showEmailTip = ref(false)
+const emailDomainError = ref('')
 const form = ref({
     companyName: '',
     abbrevName: '',
@@ -26,6 +27,16 @@ onMounted(() => {
 // click save button to save form data and navigate to dashboard
 // Using JSON.stringly to convert the form data to a string before saving it to localStorage
 function goTopage() {
+    // Email validation
+    const emailDomain = form.value.emailDomain.trim()
+    const isValidEmailDomain = /^@[\w.-]+\.\w{2}$/.test(emailDomain)
+
+    if (!isValidEmailDomain) {
+        emailDomainError.value = 'Email domain must start with @ and have 2 characters after the dot.'
+        return // Stop the function if the email domain is invalid
+    } else {
+        emailDomainError.value = ''
+    }
     const now = new Date()
     // Using toLocaleDateString to format the date in Vietnamese locale
     form.value.updateDate = now.toLocaleDateString('vi-VN', {
@@ -41,7 +52,7 @@ function goTopage() {
     localStorage.setItem('companyInfo', JSON.stringify(form.value))
     route.push('/dashboard')
     console.log('Successful ✅', form.value)
-    
+
 }
 // Automically save form data to localStorage when it changes
 // watch(form, (newForm) => {
@@ -53,6 +64,26 @@ function backTopage() {
     route.push('/dashboard')
     console.log('Back to dashboard')
 }
+
+function onTaxCodeInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    // Remove any non-numeric characters
+    input.value = input.value.replace(/\D/g, '');
+    // Limit the input to 13 characters
+    if (input.value.length > 13) {
+        input.value = input.value.slice(0, 13);
+    }
+}
+// function onEmailDomainInput(event: Event) {
+//     let input = event.target as HTMLInputElement;
+//     let value = '@' + input.value.replace(/^@+/, '')
+//     // Remove invalid characters
+//     value = value.replace(/(\.[^.]*)$/, m => m.slice(0, 3))
+//     input.value = value
+//     form.value.emailDomain = value// Remove invalid characters
+//     // Ensure the input starts with '@' and contains no spaces
+//     // Allow letters, numbers, '@', '.', and '-'
+// }
 </script>
 
 <template>
@@ -95,8 +126,9 @@ function backTopage() {
                 <!-- Tax Code -->
                 <div>
                     <label class="text-sm font-semibold text-gray-600">Tax Code</label>
-                    <input v-model="form.taxCode" type="text"
-                        class="w-full mt-1 p-2 border rounded-md text-sm text-gray-800" placeholder="Enter tax code" />
+                    <input v-model="form.taxCode" type="text" maxlength="13" inputmode="numeric" pattern="[0-9]*"
+                        @input="onTaxCodeInput" class="w-full mt-1 p-2 border rounded-md text-sm text-gray-800"
+                        placeholder="Enter tax code" />
                 </div>
 
                 <!-- Address -->
@@ -122,11 +154,33 @@ function backTopage() {
                 </div>
 
                 <!-- Email Domain -->
-                <div>
-                    <label class="text-sm font-semibold text-gray-600">Email Domain</label>
+                <div class="relative">
+                    <label class="text-sm font-semibold text-gray-600 flex items-center gap-1">
+                        Email Domain
+                        <button @click="showEmailTip = !showEmailTip" type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 hover:text-blue-500"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M12 18.5A6.5 6.5 0 1118.5 12 6.51 6.51 0 0112 18.5z" />
+                            </svg>
+                        </button>
+                    </label>
                     <input v-model="form.emailDomain" type="text"
                         class="w-full mt-1 p-2 border rounded-md text-sm text-gray-800" placeholder="e.g. @lotte.vn" />
+                    <p v-if="emailDomainError" class="text-red-500 text-sm mt-1">
+                        {{ emailDomainError }}
+                    </p>
+
+                    <div v-if="showEmailTip"
+                        class="absolute top-0 left-full ml-2 w-64 p-2 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded shadow z-10">
+                        Requirements: <br>
+                        <span class="font-semibold">@lotte.vn for example</span><br>
+                        - Must start with <code>@</code><br>
+                        - After <code>.</code> can only be 2 characters<br>
+                        - No spaces allowed<br>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
