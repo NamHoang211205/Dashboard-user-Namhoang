@@ -3,6 +3,8 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const route = useRouter()
+const companyNameError = ref('')
+const abbrevNameError = ref('')
 const showEmailTip = ref(false)
 const emailDomainError = ref('')
 const form = ref({
@@ -27,33 +29,48 @@ onMounted(() => {
 // click save button to save form data and navigate to dashboard
 // Using JSON.stringly to convert the form data to a string before saving it to localStorage
 function goTopage() {
-    // Email validation
-    const emailDomain = form.value.emailDomain.trim()
-    const isValidEmailDomain = /^@[\w.-]+\.\w{2}$/.test(emailDomain)
+    let hasError = false
 
-    if (!isValidEmailDomain) {
-        emailDomainError.value = 'Email domain must start with @ and have 2 characters after the dot.'
-        return // Stop the function if the email domain is invalid
-    } else {
-        emailDomainError.value = ''
-    }
-    const now = new Date()
-    // Using toLocaleDateString to format the date in Vietnamese locale
-    form.value.updateDate = now.toLocaleDateString('vi-VN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        // indicate that the time should be in 24-hour format
-        hour12: false,
-    });
-    localStorage.setItem('companyInfo', JSON.stringify(form.value))
-    route.push('/dashboard')
-    console.log('Successful ✅', form.value)
-
+// Company Name validation 
+if (!form.value.companyName.trim()) {
+    companyNameError.value = 'Please enter Company Name before saving.'
+    hasError = true
 }
+
+// Abbreviated Name validation 
+if (!form.value.abbrevName.trim()) {
+    abbrevNameError.value = 'Please enter Abbreviated Name before saving.'
+    hasError = true
+}
+
+// check Email Domain
+const emailDomain = form.value.emailDomain.trim()
+const isValidEmailDomain = /^@[\w-]+\.\w{2}$/.test(emailDomain)
+
+if (!isValidEmailDomain) {
+    emailDomainError.value = 'Email domain must start with @ and have 2 characters after the dot.'
+    hasError = true
+}
+// Clear error messages if validation passes
+if (hasError) return
+
+// Clear error messages if validation passes
+const now = new Date()
+form.value.updateDate = now.toLocaleDateString('vi-VN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+})
+
+localStorage.setItem('companyInfo', JSON.stringify(form.value))
+route.push('/dashboard')
+console.log('Successful ✅', form.value)
+}
+
 // Automically save form data to localStorage when it changes
 // watch(form, (newForm) => {
 //     localStorage.setItem('companyInfo', JSON.stringify(newForm))
@@ -103,7 +120,6 @@ function onTaxCodeInput(event: Event) {
                 </div>
             </div>
 
-            <!-- Grid Form -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Company Name -->
                 <div>
@@ -112,6 +128,7 @@ function onTaxCodeInput(event: Event) {
                     <input v-model="form.companyName" type="text"
                         class="w-full mt-1 p-2 border rounded-md text-sm text-gray-800"
                         placeholder="Enter company name" />
+                    <p v-if="companyNameError" class="text-red-500 text-sm mt-1">{{ companyNameError }}</p>
                 </div>
 
                 <!-- Abbreviated Name -->
@@ -121,6 +138,7 @@ function onTaxCodeInput(event: Event) {
                     <input v-model="form.abbrevName" type="text"
                         class="w-full mt-1 p-2 border rounded-md text-sm text-gray-800"
                         placeholder="Enter abbreviation" />
+                    <p v-if="abbrevNameError" class="text-red-500 text-sm mt-1">{{ abbrevNameError }}</p>
                 </div>
 
                 <!-- Tax Code -->
@@ -180,7 +198,6 @@ function onTaxCodeInput(event: Event) {
                         - No spaces allowed<br>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
