@@ -35,6 +35,11 @@ function goTopage() {
 if (!form.value.companyName.trim()) {
     companyNameError.value = 'Please enter Company Name before saving.'
     hasError = true
+} else if (/[^a-zA-Z0-9\s]/.test(form.value.companyName)) {
+    companyNameError.value = 'Company Name can only contain letters, numbers, and spaces.'
+    hasError = true
+} else {
+    companyNameError.value = '' // Clear error if valid
 }
 
 // Abbreviated Name validation 
@@ -45,7 +50,7 @@ if (!form.value.abbrevName.trim()) {
 
 // check Email Domain
 const emailDomain = form.value.emailDomain.trim()
-const isValidEmailDomain = /^@[\w-]+\.\w{2}$/.test(emailDomain)
+const isValidEmailDomain = /^@[\w]+\.\w{2}$/.test(emailDomain)
 
 if (!isValidEmailDomain) {
     emailDomainError.value = 'Email domain must start with @ and have 2 characters after the dot.'
