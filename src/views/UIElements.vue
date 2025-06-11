@@ -1,251 +1,251 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+// Toggle filters and modal
+const showFilters = ref(true)
+const showModal = ref(false)
+const showStatusSelect = ref(false)
+
+// Form data and selected status
+const form = ref({
+  firstName: '',
+  lastName: '',
+  username: '',
+})
+const selectStatus = ref('Choose status')
+
+// Validation error messages
+const firstNameError = ref('')
+const lastNameError = ref('')
+const usernameError = ref('')
+
+// Sample user list (will display in table)
+const users = ref([
+  {
+    username: 'anhnv2@lotte.vn',
+    fullName: 'Theodore T.C. Calvin',
+    status: 'Pending',
+    updatedAt: '2023/12/12 12:00',
+  },
+  {
+    username: 'anhnv2@lotte.vn',
+    fullName: 'Theodore T.C. Calvin',
+    status: 'Active',
+    updatedAt: '2023/12/12 12:00',
+  },
+  {
+    username: 'anhnv2@lotte.vn',
+    fullName: 'Theodore T.C. Calvin',
+    status: 'Activation expired',
+    updatedAt: '2023/12/12 12:00',
+  },
+])
+
+// Open modal
+function openCreateModal() {
+  showModal.value = true
+}
+
+// Close modal and reset form + errors
+function closeCreateModal() {
+  showModal.value = false
+  showStatusSelect.value = false
+  selectStatus.value = 'Choose status'
+  firstNameError.value = ''
+  lastNameError.value = ''
+  usernameError.value = ''
+  form.value = {
+    firstName: '',
+    lastName: '',
+    username: '',
+  }
+}
+
+// Validate all input fields
+function validateForm() {
+  let valid = true
+
+  if (!form.value.firstName.trim()) {
+    firstNameError.value = 'This field can not be blank'
+    valid = false
+  } else {
+    firstNameError.value = ''
+  }
+
+  if (!form.value.lastName.trim()) {
+    lastNameError.value = 'This field can not be blank'
+    valid = false
+  } else {
+    lastNameError.value = ''
+  }
+
+  if (!form.value.username.trim()) {
+    usernameError.value = 'This field can not be blank'
+    valid = false
+  } else {
+    usernameError.value = ''
+  }
+
+  return valid
+}
+
+// Handle Save: show status select if valid
+function handleSave() {
+  if (validateForm()) {
+    showStatusSelect.value = true
+  }
+}
+</script>
+
 <template>
-  <div>
-    <h3 class="text-3xl font-medium text-gray-700">
-      UI Elements
-    </h3>
-
-    <!-- Alerts -->
-    <div class="mt-4">
-      <h4 class="text-gray-600">
-        Alerts
-      </h4>
-
-      <div class="mt-4">
-        <div
-          class="px-4 py-4 overflow-x-auto bg-white rounded-md whitespace-nowrap"
-        >
-          <div
-            class="inline-flex w-full max-w-sm ml-3 overflow-hidden bg-white rounded-lg shadow-md"
-          >
-            <div class="flex items-center justify-center w-12 bg-green-500">
-              <svg
-                class="w-6 h-6 text-white fill-current"
-                viewBox="0 0 40 40"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z"
-                />
-              </svg>
-            </div>
-
-            <div class="px-4 py-2 -mx-3">
-              <div class="mx-3">
-                <span class="font-semibold text-green-500">Success</span>
-                <p class="text-sm text-gray-600">
-                  Your account was registered!
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="inline-flex w-full max-w-sm ml-3 overflow-hidden bg-white rounded-lg shadow-md"
-          >
-            <div class="flex items-center justify-center w-12 bg-blue-500">
-              <svg
-                class="w-6 h-6 text-white fill-current"
-                viewBox="0 0 40 40"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"
-                />
-              </svg>
-            </div>
-
-            <div class="px-4 py-2 -mx-3">
-              <div class="mx-3">
-                <span class="font-semibold text-blue-500">Info</span>
-                <p class="text-sm text-gray-600">
-                  Channel archived by the owner.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="inline-flex w-full max-w-sm ml-3 overflow-hidden bg-white rounded-lg shadow-md"
-          >
-            <div class="flex items-center justify-center w-12 bg-yellow-500">
-              <svg
-                class="w-6 h-6 text-white fill-current"
-                viewBox="0 0 40 40"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"
-                />
-              </svg>
-            </div>
-
-            <div class="px-4 py-2 -mx-3">
-              <div class="mx-3">
-                <span class="font-semibold text-yellow-500">Warning</span>
-                <p class="text-sm text-gray-600">
-                  Image size is too large.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="inline-flex w-full max-w-sm ml-3 overflow-hidden bg-white rounded-lg shadow-md"
-          >
-            <div class="flex items-center justify-center w-12 bg-red-500">
-              <svg
-                class="w-6 h-6 text-white fill-current"
-                viewBox="0 0 40 40"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z"
-                />
-              </svg>
-            </div>
-
-            <div class="px-4 py-2 -mx-3">
-              <div class="mx-3">
-                <span class="font-semibold text-red-500">Error</span>
-                <p class="text-sm text-gray-600">
-                  Your email is already used!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="p-6 bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">User List</h1>
+      <div class="flex gap-2">
+        <button @click="showFilters = !showFilters"
+          class="flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-700">
+          Filters
+        </button>
+        <button @click="openCreateModal"
+          class="px-4 py-2 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-50">
+          + Create New
+        </button>
       </div>
     </div>
 
-    <!-- Inputs -->
-    <div class="mt-8">
-      <h4 class="text-gray-600">
-        Inputs
-      </h4>
-
-      <div class="mt-4">
-        <div class="flex items-center px-4 py-4 space-x-4 overflow-x-auto bg-white rounded-md">
-          <label>
-            <input
-              type="radio"
-              class="w-5 h-5 text-indigo-600 focus:ring-indigo-500"
-              name="radio"
-            ><span class="ml-2 text-gray-700">Radio</span>
-          </label>
-
-          <label>
-            <input
-              type="checkbox"
-              class="w-5 h-5 text-indigo-600 rounded-md focus:ring-indigo-500"
-              name="radio"
-            ><span class="ml-2 text-gray-700">Checkbox</span>
-          </label>
-
-          <label class="block">
-            <input
-              type="email"
-              placeholder="Email"
-              class="block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-            >
-          </label>
-
-          <div class="relative mx-4 lg:mx-0">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-              <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-
-            <input
-              class="w-32 pl-10 pr-4 text-indigo-600 border-gray-200 rounded-md sm:w-64 focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500"
-              type="text"
-              placeholder="Search"
-            >
-          </div>
-        </div>
+    <!-- Filter Inputs -->
+    <div v-if="showFilters" class="grid grid-cols-4 gap-4 bg-white p-4 rounded shadow mb-4">
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Email Address</label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="Enter email address" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Full Name</label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="Enter full name" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Updated Date</label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded" placeholder="From - To date" />
+      </div>
+      <div>
+        <label class="block text-sm text-gray-600 mb-1">Status</label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded">
+          <option>Choose status</option>
+          <option>Active</option>
+          <option>Pending</option>
+          <option>Activation expired</option>
+        </select>
       </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="mt-8">
-      <h4 class="text-gray-600">
-        Buttons
-      </h4>
+    <!-- User Table -->
+    <div class="bg-white rounded shadow overflow-x-auto">
+      <table class="min-w-full text-sm text-left">
+        <thead class="bg-gray-100 text-gray-600 font-medium">
+          <tr>
+            <th class="px-6 py-3">No.</th>
+            <th class="px-6 py-3">Username</th>
+            <th class="px-6 py-3">Full Name</th>
+            <th class="px-6 py-3">Status</th>
+            <th class="px-6 py-3">Updated Date</th>
+            <th class="px-6 py-3">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 text-gray-700">
+          <tr v-for="(user, index) in users" :key="index">
+            <td class="px-6 py-3">{{ index + 1 }}</td>
+            <td class="px-6 py-3">{{ user.username }}</td>
+            <td class="px-6 py-3">{{ user.fullName }}</td>
+            <td class="px-6 py-3">
+              <span :class="[
+                'px-2 py-1 text-xs font-medium rounded border',
+                user.status === 'Active' ? 'text-green-600 border-green-600 bg-green-50' :
+                user.status === 'Pending' ? 'text-orange-600 border-orange-600 bg-orange-50' :
+                'text-blue-600 border-blue-600 bg-blue-50'
+              ]">
+                {{ user.status }}
+              </span>
+            </td>
+            <td class="px-6 py-3">{{ user.updatedAt }}</td>
+            <td class="px-6 py-3 text-sm text-gray-500">[...]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-      <div class="mt-4">
-        <div class="flex px-4 py-4 space-x-4 overflow-x-auto bg-white rounded-md">
-          <button class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">
-            Primary
+    <!-- Modal -->
+    <Teleport to="body">
+      <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative">
+          <!-- Close Button -->
+          <button @click="closeCreateModal"
+                  class="absolute top-4 right-4 text-xl font-bold text-gray-400 hover:text-black">
+            &times;
           </button>
 
-          <button class="flex items-center px-2 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">
-            <svg class="w-5 h-5 mx-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-            </svg>
-            <span class="mx-1">Refresh</span>
-          </button>
+          <h2 class="text-lg font-semibold mb-6">Create New User</h2>
 
-          <div class="flex items-center">
-            <button class="px-4 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-200 transform bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">
-              Download
+          <!-- Form -->
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Last Name -->
+            <div>
+              <label class="block mb-1 text-sm font-medium">Last Name<span class="text-red-500">*</span></label>
+              <input v-model="form.lastName"
+                     :class="['w-full border rounded px-3 py-2', lastNameError ? 'border-red-500' : 'border-gray-300']"
+                     placeholder="Enter last name" />
+              <p v-if="lastNameError" class="text-red-500 text-sm mt-1">{{ lastNameError }}</p>
+            </div>
+
+            <!-- First Name -->
+            <div>
+              <label class="block mb-1 text-sm font-medium">First Name<span class="text-red-500">*</span></label>
+              <input v-model="form.firstName"
+                     :class="['w-full border rounded px-3 py-2', firstNameError ? 'border-red-500' : 'border-gray-300']"
+                     placeholder="Enter first name" />
+              <p v-if="firstNameError" class="text-red-500 text-sm mt-1">{{ firstNameError }}</p>
+            </div>
+
+            <!-- Username -->
+            <div class="col-span-2">
+              <label class="block mb-1 text-sm font-medium">Username<span class="text-red-500">*</span></label>
+              <div class="flex">
+                <input v-model="form.username"
+                       :class="['flex-1 border rounded-l px-3 py-2', usernameError ? 'border-red-500' : 'border-gray-300']"
+                       placeholder="Enter username" />
+                <span class="px-3 py-2 bg-gray-100 border border-l-0 rounded-r text-gray-500">lotte.vn</span>
+              </div>
+              <p v-if="usernameError" class="text-red-500 text-sm mt-1">{{ usernameError }}</p>
+            </div>
+
+            <!-- Status Select -->
+            <div class="col-span-2" v-if="showStatusSelect">
+              <label class="block mb-1 text-sm font-medium">Status<span class="text-red-500">*</span></label>
+              <select v-model="selectStatus" class="w-full border rounded px-3 py-2">
+                <option disabled>Choose status</option>
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+                <option value="Activation expired">Activation expired</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Footer Buttons -->
+          <div class="flex justify-end gap-2 mt-6">
+            <button @click="closeCreateModal"
+                    class="px-4 py-2 border border-gray-400 text-gray-600 rounded hover:bg-gray-100">
+              Back
             </button>
-
-            <span class="border border-transparent" />
-
-            <div class="relative">
-              <!-- Menu toggle button -->
-              <button class="relative z-10 block p-2 transition-colors duration-200 transform bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">
-                <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                </svg>
-              </button>
-
-              <!-- Menu list -->
-              <div class="absolute right-0 z-20 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-700" />
-            </div>
+            <button @click="handleSave"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Save
+            </button>
+            <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+              Save and create employee
+            </button>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Paginations -->
-    <div class="mt-8">
-      <h4 class="text-gray-600">
-        Paginations
-      </h4>
-
-      <div class="mt-4">
-        <div class="flex px-4 py-4 overflow-x-auto bg-white rounded-md">
-          <div class="flex mr-4 rounded">
-            <a
-              href="#"
-              class="px-3 py-2 ml-0 leading-tight text-indigo-700 bg-white border border-r-0 border-gray-200 rounded-l hover:bg-indigo-500 hover:text-white"
-            ><span>Previous</span></a>
-            <a
-              href="#"
-              class="px-3 py-2 leading-tight text-indigo-700 bg-white border border-r-0 border-gray-200 hover:bg-indigo-500 hover:text-white"
-            ><span>1</span></a>
-            <a
-              href="#"
-              class="px-3 py-2 leading-tight text-indigo-700 bg-white border border-r-0 border-gray-200 hover:bg-indigo-500 hover:text-white"
-            ><span>2</span></a>
-            <a
-              href="#"
-              class="px-3 py-2 leading-tight text-indigo-700 bg-white border border-r-0 border-gray-200 hover:bg-indigo-500 hover:text-white"
-            ><span>3</span></a>
-            <a
-              href="#"
-              class="px-3 py-2 leading-tight text-indigo-700 bg-white border border-gray-200 rounded-r hover:bg-indigo-500 hover:text-white"
-            ><span>Next</span></a>
-          </div>
-        </div>
-      </div>
-    </div>
+    </Teleport>
   </div>
 </template>

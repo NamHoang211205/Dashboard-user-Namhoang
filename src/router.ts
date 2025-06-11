@@ -6,11 +6,12 @@ import Forms from './views/Forms.vue'
 import Tables from './views/Tables.vue'
 import UIElements from './views/UIElements.vue'
 import Login from './views/Login.vue'
-import Modal from './views/Modal.vue'
+// import Modal from './views/Modal.vue'
 import Card from './views/Card.vue'
 import Blank from './views/Blank.vue'
-import SidebarMenu from './components/SidebarMenu.vue'
+// import SidebarMenu from './components/SidebarMenu.vue'
 import Edit from './views/Edit.vue'
+import Create from './views/Create.vue'
 
 
 const routes: RouteRecordRaw[] = [
@@ -51,19 +52,9 @@ const routes: RouteRecordRaw[] = [
     component: UIElements,
   },
   {
-    path: '/modal',
-    name: 'Modal',
-    component: Modal,
-  },
-  {
-    path: '/blank',
-    name: 'Blank',
-    component: Blank,
-  },
-  {
-    path: '/sidebarmenu',
-    name: 'SidebarMenu',
-    component: SidebarMenu,
+    path: '/create',
+    name: 'Create',
+    component: Create,
   },
 ]
 
