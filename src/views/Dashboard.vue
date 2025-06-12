@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
+import Filter from '../components/Filter.vue'
+import UserTable from '../components/UserTable.vue'
 
 const router = useRouter()
 
