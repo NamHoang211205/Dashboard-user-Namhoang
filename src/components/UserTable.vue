@@ -23,22 +23,29 @@ const props = defineProps<{
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 text-gray-700">
-                <tr v-for="(user, index) in users" :key="index">
-                    <td class="px-6 py-3">{{ index + 1 }}</td>
-                    <td class="px-6 py-3">{{ user.username }}</td>
-                    <td class="px-6 py-3">{{ user.fullName }}</td>
-                    <td class="px-6 py-3">
-                        <span :class="[
-                            'px-2 py-1 text-xs font-medium rounded border',
-                            user.status === 'Active' ? 'text-green-600 border-green-600 bg-green-50' :
-                                user.status === 'Pending' ? 'text-orange-600 border-orange-600 bg-orange-50' :
-                                    'text-blue-600 border-blue-600 bg-blue-50'
-                        ]">
-                            {{ user.status }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-3">{{ user.updatedAt }}</td>
-                    <td class="px-6 py-3 text-sm text-gray-500">[...]</td>
+                <!-- Check if there's user found -->
+                <template v-if="users.length > 0">
+                    <tr v-for="(user, id) in users" :key="user.username">
+                        <td class="px-6 py-3">{{ id + 1 }}</td>
+                        <td class="px-6 py-3">{{ user.username }}</td>
+                        <td class="px-6 py-3">{{ user.fullName }}</td>
+                        <td class="px-6 py-3">
+                            <span :class="[
+                                'px-2 py-1 text-xs font-medium rounded border',
+                                user.status === 'Active' ? 'text-green-600 border-green-600 bg-green-50' :
+                                    user.status === 'Pending' ? 'text-orange-600 border-orange-600 bg-orange-50' :
+                                        'text-blue-600 border-blue-600 bg-blue-50'
+                            ]">
+                                {{ user.status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-3">{{ user.updatedAt }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-500">[...]</td>
+                    </tr>
+                </template>
+                <!-- When no users found -->
+                <tr v-else>
+                    <td colspan="6" class="px-6 py-3 text-center text-gray-500">No users found</td>
                 </tr>
             </tbody>
         </table>
