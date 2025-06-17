@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { reactive, watch } from 'vue'
+import type { Ref } from 'vue'
 
 const props = defineProps<{
   showModal: boolean
@@ -36,14 +37,6 @@ watch(
   { immediate: true }
 )
 
-const isFormValid = computed(() => {
-  return (
-    localForm.firstName.trim() !== '' &&
-    localForm.lastName.trim() !== '' &&
-    localForm.username.trim() !== ''
-  )
-})
-
 function formatDate(date: Date): string {
   const yyyy = date.getFullYear()
   const mm = String(date.getMonth() + 1).padStart(2, '0')
@@ -51,13 +44,14 @@ function formatDate(date: Date): string {
   const hh = String(date.getHours()).padStart(2, '0')
   const min = String(date.getMinutes()).padStart(2, '0')
   const ss = String(date.getSeconds()).padStart(2, '0')
-  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
+  return `${yyyy}/${mm}/${dd} ${hh}:${min}:${ss}`
 }
 
 function handleLocalSave() {
   emit('submit', {
     ...localForm,
     status: props.selectStatus,
+    updatedAt: formatDate(new Date()),
   })
 }
 </script>
@@ -76,24 +70,21 @@ function handleLocalSave() {
           <input v-model="localForm.lastName" class="w-full border rounded px-3 py-2" />
           <p class="text-red-500 text-sm">{{ props.lastNameError }}</p>
         </div>
-
         <div>
           <label class="block text-sm font-medium mb-1">First Name <span class="text-red-500">*</span></label>
           <input v-model="localForm.firstName" class="w-full border rounded px-3 py-2" />
           <p class="text-red-500 text-sm">{{ props.firstNameError }}</p>
         </div>
-
         <div class="col-span-2">
           <label class="block text-sm font-medium mb-1">Username <span class="text-red-500">*</span></label>
           <input v-model="localForm.username" class="w-full border rounded px-3 py-2" />
           <p class="text-red-500 text-sm">{{ props.usernameError }}</p>
         </div>
-
         <div class="col-span-2">
           <label class="block text-sm font-medium mb-1">Status <span class="text-red-500">*</span></label>
           <select
             :value="props.selectStatus"
-            @input="emit('update:selectStatus', ($event.target as HTMLSelectElement).value)"
+            @change="emit('update:selectStatus', ($event.target as HTMLSelectElement).value)"
             class="w-full border rounded px-3 py-2"
           >
             <option disabled>Choose status</option>
@@ -102,7 +93,6 @@ function handleLocalSave() {
             <option>Activation expired</option>
           </select>
         </div>
-
         <div class="col-span-2">
           <label class="block text-sm font-medium mb-1">Updated At</label>
           <input
