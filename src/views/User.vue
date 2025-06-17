@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref } from 'vue'
 
 interface User {
@@ -8,4 +8,4 @@ interface User {
   title2: string
   status: string
   role: string
-}
+} -->
