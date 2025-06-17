@@ -55,7 +55,7 @@ const inactiveClass = ref(
         </router-link>
 
         <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-          :class="[$route.name === 'UIElements' ? activeClass : inactiveClass]" to="/ui-elements">
+          :class="[$route.name === 'Userpage' ? activeClass : inactiveClass]" to="/userpage">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M16.6287 19.8184C15.822 20.0567 14.8687 20.1667 13.7503 20.1667H8.25032C7.13199 20.1667 6.17866 20.0567 5.37199 19.8184C5.57366 17.4351 8.02116 15.5559 11.0003 15.5559C13.9795 15.5559 16.427 17.4351 16.6287 19.8184Z"
@@ -113,7 +113,7 @@ const inactiveClass = ref(
 
           <span class="mx-4">Organization Chart</span>
         </router-link>
-        <SidebarMenu />
+        <!-- <SidebarMenu /> -->
       </nav>
     </div>
   </div>
