@@ -60,6 +60,26 @@ function handleEdit(user: User) {
 }
 
 function handleSubmit(newUser: any) {
+//  validate form inputs
+  firstNameError.value = ''
+  lastNameError.value = ''
+  usernameError.value = ''
+
+  let hasError = false 
+  if (!newUser.firstName.trim()) {
+    firstNameError.value = 'First name is required'
+    hasError = true
+  }
+  if (!newUser.lastName.trim()) {
+    lastNameError.value = 'Last name is required'
+    hasError = true
+  }
+  if (!newUser.username.trim()) {
+    usernameError.value = 'Username is required'
+    hasError = true
+  }
+  if (hasError) return
+
   const index = users.value.findIndex((u) => u.username === newUser.username)
 
   const updatedUser = {
