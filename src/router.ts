@@ -4,14 +4,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from './views/Dashboard.vue'
 import Forms from './views/Forms.vue'
 import Tables from './views/Tables.vue'
-import UIElements from './views/UIElements.vue'
+import Userpage from './views/Userpage.vue'
 import Login from './views/Login.vue'
 // import Modal from './views/Modal.vue'
 import Card from './views/Card.vue'
 import Blank from './views/Blank.vue'
 // import SidebarMenu from './components/SidebarMenu.vue'
 import Edit from './views/Edit.vue'
-import Create from './views/Create.vue'
+// import UserModal from './components/UserModal.vue'
 
 
 const routes: RouteRecordRaw[] = [
@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'Login',
     component: Login,
-    meta: { layout: 'empty' },
+    meta: { layout: 'EmptyLayout' },
   },
   {
     path: '/dashboard',
@@ -47,15 +47,15 @@ const routes: RouteRecordRaw[] = [
     component: Tables,
   },
   {
-    path: '/ui-elements',
-    name: 'UIElements',
-    component: UIElements,
+    path: '/userpage',
+    name: 'Userpage',
+    component: Userpage,
   },
-  {
-    path: '/create',
-    name: 'Create',
-    component: Create,
-  },
+  // {
+  //   path: '/user-modal',
+  //   name: 'UserModal',
+  //   component: UserModal,
+  // },
 ]
 
 const router = createRouter({
