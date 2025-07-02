@@ -1,5 +1,10 @@
-
 import type { Ref } from 'vue'
+import {
+  validateFirstName,
+  validateLastName,
+  validateUsername,
+  validateStatus
+} from '../utils/Validation.ts'
 
 export interface User {
   username: string
@@ -66,22 +71,10 @@ export function handleSubmitFn(
   statusError.value = ''
 
   let hasError = false
-  if (!newUser.firstName.trim()) {
-    firstNameError.value = 'First name is required'
-    hasError = true
-  }
-  if (!newUser.lastName.trim()) {
-    lastNameError.value = 'Last name is required'
-    hasError = true
-  }
-  if (!newUser.username.trim()) {
-    usernameError.value = 'Username is required'
-    hasError = true
-  }
-  if (newUser.status === 'Choose status') {
-    statusError.value = 'Status is required'
-    hasError = true
-  }
+  if (!validateFirstName(newUser.firstName, firstNameError)) hasError = true
+  if (!validateLastName(newUser.lastName, lastNameError)) hasError = true
+  if (!validateUsername(newUser.username, usernameError)) hasError = true
+  if (!validateStatus(newUser.status, statusError)) hasError = true
 
   if (hasError) return
 

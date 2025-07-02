@@ -53,7 +53,7 @@ function handleSubmit(newUser: any) {
     lastNameError,
     usernameError,
     statusError,
-    closeCreateModal // ✅ đúng thứ tự
+    closeCreateModal 
   )
 }
 

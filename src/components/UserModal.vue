@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue'
 import type { Ref } from 'vue'
+import {
+  validateFirstName,
+  validateLastName,
+  validateUsername,
+  validateStatus
+} from '../utils/Validation.ts'
 
 const props = defineProps<{
   showModal: boolean

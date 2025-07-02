@@ -1,67 +1,47 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import {
+  validateCompanyName,
+  validateAbbreviatedName,
+  validateEmailDomain
+} from '../utils/Validation'
 
 const route = useRouter()
 const companyNameError = ref('')
 const abbrevNameError = ref('')
-const showEmailTip = ref(false)
 const emailDomainError = ref('')
+const showEmailTip = ref(false)
+
 const form = ref({
-    companyName: '',
-    abbrevName: '',
-    taxCode: '',
-    address: '',
-    adminUsername: '',
-    emailDomain: '',
-    contactPoint: '',
-    updateDate: '',
+  companyName: '',
+  abbrevName: '',
+  taxCode: '',
+  address: '',
+  adminUsername: '',
+  emailDomain: '',
+  contactPoint: '',
+  updateDate: '',
 })
-// save form data to localStorage when the save button is clicked
-// Using JSON.oarse to convert the string from localStorage back to an object
-// Load saved company information from localStorage when the component is mounted
+
 onMounted(() => {
-    const saved = localStorage.getItem('companyInfo')
-    if (saved) {
-        form.value = JSON.parse(saved)
-    }
+  const saved = localStorage.getItem('companyInfo')
+  if (saved) {
+    form.value = JSON.parse(saved)
+  }
 })
-// click save button to save form data and navigate to dashboard
-// Using JSON.stringly to convert the form data to a string before saving it to localStorage
+
 function goTopage() {
-    let hasError = false
+  let hasError = false
 
-// Company Name validation 
-if (!form.value.companyName.trim()) {
-    companyNameError.value = 'Please enter Company Name before saving.'
-    hasError = true
-} else if (/[^a-zA-Z0-9\s]/.test(form.value.companyName)) {
-    companyNameError.value = 'Company Name can only contain letters, numbers, and spaces.'
-    hasError = true
-} else {
-    companyNameError.value = '' // Clear error if valid
-}
+  if (!validateCompanyName(form.value.companyName, companyNameError)) hasError = true
+  if (!validateAbbreviatedName(form.value.abbrevName, abbrevNameError)) hasError = true
+  if (!validateEmailDomain(form.value.emailDomain, emailDomainError)) hasError = true
 
-// Abbreviated Name validation 
-if (!form.value.abbrevName.trim()) {
-    abbrevNameError.value = 'Please enter Abbreviated Name before saving.'
-    hasError = true
-}
+  if (hasError) return
 
-// check Email Domain
-const emailDomain = form.value.emailDomain.trim()
-const isValidEmailDomain = /^@[\w]+\.\w{2}$/.test(emailDomain)
-
-if (!isValidEmailDomain) {
-    emailDomainError.value = 'Email domain must start with @ and have 2 characters after the dot.'
-    hasError = true
-}
-// Clear error messages if validation passes
-if (hasError) return
-
-// Clear error messages if validation passes
-const now = new Date()
-form.value.updateDate = now.toLocaleDateString('vi-VN', {
+  const now = new Date()
+  form.value.updateDate = now.toLocaleDateString('vi-VN', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -69,44 +49,27 @@ form.value.updateDate = now.toLocaleDateString('vi-VN', {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
-})
+  })
 
-localStorage.setItem('companyInfo', JSON.stringify(form.value))
-route.push('/dashboard')
-console.log('Successful ✅', form.value)
+  localStorage.setItem('companyInfo', JSON.stringify(form.value))
+  route.push('/dashboard')
+  console.log('Successful ✅', form.value)
 }
 
-// Automically save form data to localStorage when it changes
-// watch(form, (newForm) => {
-//     localStorage.setItem('companyInfo', JSON.stringify(newForm))
-//     console.log('Successful ✅', newForm)
-// }, { deep: true })
-
 function backTopage() {
-    route.push('/dashboard')
-    console.log('Back to dashboard')
+  route.push('/dashboard')
+  console.log('Back to dashboard')
 }
 
 function onTaxCodeInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    // Remove any non-numeric characters
-    input.value = input.value.replace(/\D/g, '');
-    // Limit the input to 13 characters
-    if (input.value.length > 13) {
-        input.value = input.value.slice(0, 13);
-    }
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.replace(/\D/g, '');
+  if (input.value.length > 13) {
+    input.value = input.value.slice(0, 13);
+  }
 }
-// function onEmailDomainInput(event: Event) {
-//     let input = event.target as HTMLInputElement;
-//     let value = '@' + input.value.replace(/^@+/, '')
-//     // Remove invalid characters
-//     value = value.replace(/(\.[^.]*)$/, m => m.slice(0, 3))
-//     input.value = value
-//     form.value.emailDomain = value// Remove invalid characters
-//     // Ensure the input starts with '@' and contains no spaces
-//     // Allow letters, numbers, '@', '.', and '-'
-// }
 </script>
+
 
 <template>
     <div class="relative">
