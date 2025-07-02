@@ -3,6 +3,20 @@ import { ref, onMounted } from 'vue'
 import UserTable from '../components/UserTable.vue'
 import UserModal from '../components/UserModal.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
+import {
+  openCreateModalFn,
+  closeCreateModalFn,
+  handleEditFn,
+  handleSubmitFn,
+  toggleFiltersFn,
+  handleDeleteRequestFn,
+  confirmDeleteFn,
+  handleActiveFn,
+  confirmActiveFn,
+  cancelActiveFn,
+  handleLockFn,
+  type User
+} from '../utils/Function.ts' 
 
 const showModal = ref(false)
 const form = ref({ firstName: '', lastName: '', username: '', updatedAt: '' })
@@ -10,142 +24,83 @@ const selectStatus = ref('Choose status')
 const firstNameError = ref('')
 const lastNameError = ref('')
 const usernameError = ref('')
+const statusError = ref('')
 const showFilters = ref(true)
 const confirmActiveVisible = ref(false)
-const selectedUserForActive = ref<any>(null)
+const selectedUserForActive = ref<User | null>(null)
 const users = ref<User[]>([])
 const showConfirmModal = ref(false)
 const selectedUser = ref<User | null>(null)
 const lockedUser = ref<User | null>(null)
 
-interface User {
-  username: string
-  fullName: string
-  status: string
-  updatedAt: string
-}
-
-onMounted(() => {
-  const saved = localStorage.getItem('users')
-  if (saved) users.value = JSON.parse(saved)
-})
-
 function openCreateModal() {
-  showModal.value = true
-  form.value = { firstName: '', lastName: '', username: '', updatedAt: '' }
-  selectStatus.value = 'Choose status'
+  openCreateModalFn(showModal, form, selectStatus)
 }
 
 function closeCreateModal() {
-  showModal.value = false
-  firstNameError.value = ''
-  lastNameError.value = ''
-  usernameError.value = ''
+  closeCreateModalFn(showModal, firstNameError, lastNameError, usernameError)
 }
 
 function handleEdit(user: User) {
-  const nameParts = user.fullName.trim().split(' ')
-  const firstName = nameParts[0]
-  const lastName = nameParts.slice(1).join(' ') || ''
-
-  form.value = {
-    firstName,
-    lastName,
-    username: user.username,
-    updatedAt: user.updatedAt,
-  }
-
-  selectStatus.value = user.status
-  showModal.value = true
+  handleEditFn(user, form, selectStatus, showModal)
 }
 
 function handleSubmit(newUser: any) {
-//  validate form inputs
-  firstNameError.value = ''
-  lastNameError.value = ''
-  usernameError.value = ''
-
-  let hasError = false 
-  if (!newUser.firstName.trim()) {
-    firstNameError.value = 'First name is required'
-    hasError = true
-  }
-  if (!newUser.lastName.trim()) {
-    lastNameError.value = 'Last name is required'
-    hasError = true
-  }
-  if (!newUser.username.trim()) {
-    usernameError.value = 'Username is required'
-    hasError = true
-  }
-  if (hasError) return
-
-  const index = users.value.findIndex((u) => u.username === newUser.username)
-
-  const updatedUser = {
-    username: newUser.username,
-    fullName: `${newUser.firstName} ${newUser.lastName}`,
-    status: newUser.status,
-    updatedAt: newUser.updatedAt,
-  }
-
-  if (index !== -1) {
-    users.value[index] = updatedUser
-  } else {
-    users.value.push(updatedUser)
-  }
-
-  localStorage.setItem('users', JSON.stringify(users.value))
-  closeCreateModal()
+  handleSubmitFn(
+    newUser,
+    users,
+    firstNameError,
+    lastNameError,
+    usernameError,
+    statusError,
+    closeCreateModal // ✅ đúng thứ tự
+  )
 }
 
 function toggleFilters() {
-  showFilters.value = !showFilters.value
-}
-
-function handleSelectStatus(status: string) {
-  selectStatus.value = status
+  toggleFiltersFn(showFilters)
 }
 
 function handleDeleteRequest(user: User) {
-  selectedUser.value = user
-  showConfirmModal.value = true
+  handleDeleteRequestFn(user, selectedUser, showConfirmModal)
 }
 
 function confirmDelete() {
-  if (selectedUser.value) {
-    users.value = users.value.filter(u => u.username !== selectedUser.value?.username)
-    localStorage.setItem('users', JSON.stringify(users.value))
-  }
-  showConfirmModal.value = false
-  selectedUser.value = null
+  confirmDeleteFn(users, selectedUser, showConfirmModal)
 }
 
 function handleActive(user: User) {
-  selectedUserForActive.value = user
-  confirmActiveVisible.value = true
+  handleActiveFn(user, selectedUserForActive, confirmActiveVisible)
 }
 
 function confirmActive() {
-  if (selectedUserForActive.value) {
-    const index = users.value.findIndex(u => u.username === selectedUserForActive.value.username)
-    if (index !== -1) {
-      users.value[index].status = 'Active'
-      localStorage.setItem('users', JSON.stringify(users.value))
-    }
-  }
-  confirmActiveVisible.value = false
+  confirmActiveFn(users, selectedUserForActive, confirmActiveVisible)
 }
 
 function cancelActive() {
-  confirmActiveVisible.value = false
-  selectedUserForActive.value = null
+  cancelActiveFn(confirmActiveVisible, selectedUserForActive)
 }
 
 function handleLock(user: User) {
-  lockedUser.value = user
-  showConfirmModal.value = true
+  handleLockFn(user, lockedUser, showConfirmModal)
 }
+
+function handleSelectStatus(newStatus: string) {
+  selectStatus.value = newStatus
+}
+
+// Save users to localStorage whenever they change
+onMounted(() => {
+  const saved = localStorage.getItem('users')
+  if (saved) {
+    try {
+      users.value = JSON.parse(saved)
+    } catch (e) {
+      users.value = []
+      console.error('❌ Failing in parsing the data', e)
+    }
+  }
+})
 </script>
 
 <template>
@@ -184,10 +139,11 @@ function handleLock(user: User) {
       </select>
     </div>
 
-    <UserTable :users="users" @edit="handleEdit" @deleteAccount="handleDeleteRequest" @active="handleActive" @lock="handleLock"/>
+    <UserTable :users="users" @edit="handleEdit" @deleteAccount="handleDeleteRequest" @active="handleActive"
+      @lock="handleLock" />
 
     <UserModal :showModal="showModal" :form="form" :selectStatus="selectStatus" :firstNameError="firstNameError"
-      :lastNameError="lastNameError" :usernameError="usernameError" :closeCreateModal="closeCreateModal"
+      :lastNameError="lastNameError" :usernameError="usernameError" :closeCreateModal="closeCreateModal" :statusError="statusError"
       @submit="handleSubmit" @update:selectStatus="handleSelectStatus" />
 
     <!-- Confirm Delete Modal -->
