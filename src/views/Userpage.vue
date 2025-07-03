@@ -19,7 +19,7 @@ import {
 } from '../utils/Function.ts' 
 
 const showModal = ref(false)
-const form = ref({ firstName: '', lastName: '', username: '', updatedAt: '' })
+const form = ref({ id: '', firstName: '', lastName: '', username: '', updatedAt: '' })
 const selectStatus = ref('Choose status')
 const firstNameError = ref('')
 const lastNameError = ref('')

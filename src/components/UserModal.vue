@@ -11,6 +11,7 @@ import {
 const props = defineProps<{
   showModal: boolean
   form: {
+    id?: string
     firstName: string
     lastName: string
     username: string
@@ -26,6 +27,7 @@ const props = defineProps<{
 const emit = defineEmits(['update:selectStatus', 'submit'])
 
 const localForm = reactive({
+  id: '', 
   firstName: '',
   lastName: '',
   username: '',
@@ -35,6 +37,7 @@ watch(
   () => props.showModal,
   (visible) => {
     if (visible) {
+      localForm.id = props.form.id || '' 
       localForm.firstName = props.form.firstName
       localForm.lastName = props.form.lastName
       localForm.username = props.form.username
@@ -56,6 +59,7 @@ function formatDate(date: Date): string {
 function handleLocalSave() {
   emit('submit', {
     ...localForm,
+    id: localForm.id || crypto.randomUUID(), // ✅ Tạo id nếu chưa có
     status: props.selectStatus,
     updatedAt: formatDate(new Date()),
   })
@@ -66,7 +70,9 @@ function handleLocalSave() {
   <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded shadow w-[600px]">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Update User</h2>
+        <h2 class="text-xl font-semibold">
+          {{ localForm.id ? 'Update User' : 'Create User' }}
+        </h2>
         <button @click="props.closeCreateModal" class="text-gray-500 text-xl">✕</button>
       </div>
 

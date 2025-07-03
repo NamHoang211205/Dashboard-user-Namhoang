@@ -7,6 +7,7 @@ import {
 } from '../utils/Validation.ts'
 
 export interface User {
+  id: string
   username: string
   fullName: string
   status: string
@@ -19,10 +20,15 @@ export function openCreateModalFn(
   selectStatus: Ref<string>
 ) {
   showModal.value = true
-  form.value = { firstName: '', lastName: '', username: '', updatedAt: '' }
+  form.value = {
+    id: '', 
+    firstName: '',
+    lastName: '',
+    username: '',
+    updatedAt: ''
+  }
   selectStatus.value = 'Choose status'
 }
-
 export function closeCreateModalFn(
   showModal: Ref<boolean>,
   firstNameError: Ref<string>,
@@ -41,20 +47,18 @@ export function handleEditFn(
   selectStatus: Ref<string>,
   showModal: Ref<boolean>
 ) {
-  const nameParts = user.fullName.trim().split(' ')
-  const firstName = nameParts[0]
-  const lastName = nameParts.slice(1).join(' ') || ''
-
+  const [firstName, lastName] = user.fullName.split(' ')
   form.value = {
+    id: user.id, 
     firstName,
     lastName,
     username: user.username,
-    updatedAt: user.updatedAt,
+    updatedAt: user.updatedAt
   }
-
   selectStatus.value = user.status
   showModal.value = true
 }
+
 
 export function handleSubmitFn(
   newUser: any,
@@ -65,36 +69,46 @@ export function handleSubmitFn(
   statusError: Ref<string>,
   closeCreateModal: () => void
 ) {
-  firstNameError.value = ''
-  lastNameError.value = ''
-  usernameError.value = ''
-  statusError.value = ''
-
-  let hasError = false
-  if (!validateFirstName(newUser.firstName, firstNameError)) hasError = true
-  if (!validateLastName(newUser.lastName, lastNameError)) hasError = true
-  if (!validateUsername(newUser.username, usernameError)) hasError = true
-  if (!validateStatus(newUser.status, statusError)) hasError = true
-
-  if (hasError) return
-
-  const index = users.value.findIndex(u => u.username === newUser.username)
-  const updatedUser = {
-    username: newUser.username,
-    fullName: `${newUser.firstName} ${newUser.lastName}`,
-    status: newUser.status,
-    updatedAt: newUser.updatedAt,
+  
+  if (!newUser.firstName.trim()) {
+    firstNameError.value = 'First name is required'
+    return
+  }
+  if (!newUser.lastName.trim()) {
+    lastNameError.value = 'Last name is required'
+    return
+  }
+  if (!newUser.username.trim()) {
+    usernameError.value = 'Username is required'
+    return
+  }
+  if (!newUser.status || newUser.status === 'Choose status') {
+    statusError.value = 'Status is required'
+    return
   }
 
+  const fullName = `${newUser.firstName} ${newUser.lastName}`
+
+  const newUserData: User = {
+    id: newUser.id || crypto.randomUUID(), // 
+    username: newUser.username,
+    fullName,
+    status: newUser.status,
+    updatedAt: newUser.updatedAt
+  }
+
+  const index = users.value.findIndex(user => user.id === newUserData.id)
+
   if (index !== -1) {
-    users.value[index] = updatedUser
+    users.value[index] = newUserData // update
   } else {
-    users.value.push(updatedUser)
+    users.value.push(newUserData) // create
   }
 
   localStorage.setItem('users', JSON.stringify(users.value))
   closeCreateModal()
 }
+
 
 export function toggleFiltersFn(showFilters: Ref<boolean>) {
   showFilters.value = !showFilters.value
