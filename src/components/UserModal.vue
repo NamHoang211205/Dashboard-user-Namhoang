@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import {
   validateFirstName,
@@ -33,6 +33,9 @@ const localForm = reactive({
   username: '',
 })
 
+const showUpdatedAt = ref(false)
+const updatedAtText = ref('')
+
 watch(
   () => props.showModal,
   (visible) => {
@@ -41,6 +44,14 @@ watch(
       localForm.firstName = props.form.firstName
       localForm.lastName = props.form.lastName
       localForm.username = props.form.username
+
+      if (props.form.updatedAt) {
+        updatedAtText.value = props.form.updatedAt
+        showUpdatedAt.value = true
+      } else {
+        updatedAtText.value = ''
+        showUpdatedAt.value = false
+      }
     }
   },
   { immediate: true }
@@ -105,11 +116,13 @@ function handleLocalSave() {
             <option>Activation expired</option>
           </select>
         </div>
-        <div class="col-span-2">
+
+        <!-- ✅ Hiển thị updatedAt chỉ khi có -->
+        <div class="col-span-2" v-if="showUpdatedAt">
           <label class="block text-sm font-medium mb-1">Updated At</label>
           <input
             type="text"
-            :value="formatDate(new Date())"
+            :value="updatedAtText"
             readonly
             class="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed"
           />
@@ -127,3 +140,4 @@ function handleLocalSave() {
     </div>
   </div>
 </template>
+
