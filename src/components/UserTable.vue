@@ -3,7 +3,8 @@ import ActionButton from './ActionButton.vue'
 
 type User = {
   username: string
-  fullName: string
+  firstName: string
+  lastName: string
   status: string
   updatedAt: string
 }
@@ -49,7 +50,7 @@ function handleActive(user: User) {
         <tr v-for="(user, id) in users" :key="user.username">
           <td class="py-3 px-4">{{ id + 1 }}</td>
           <td class="py-3 px-4 truncate">{{ user.username }}</td>
-          <td class="py-3 px-4 truncate">{{ user.fullName }}</td>
+          <td class="py-3 px-4 truncate">{{ user.firstName }} {{ user.lastName }}</td>
           <td class="py-3 px-4">
             <span class="text-xs font-semibold px-3 py-1 rounded-full border inline-block"
               :class="{

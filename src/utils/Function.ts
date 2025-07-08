@@ -1,4 +1,5 @@
 import type { Ref } from 'vue'
+import { formatNow } from '../utils/Format.js'
 import {
   validateFirstName,
   validateLastName,
@@ -6,10 +7,12 @@ import {
   validateStatus
 } from '../utils/Validation.ts'
 
+
 export interface User {
   id: string
   username: string
-  fullName: string
+  firstName: string
+  lastName: string
   status: string
   updatedAt: string
 }
@@ -47,18 +50,17 @@ export function handleEditFn(
   selectStatus: Ref<string>,
   showModal: Ref<boolean>
 ) {
-  const [firstName, lastName] = user.fullName.split(' ')
   form.value = {
-    id: user.id, 
-    firstName,
-    lastName,
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
     username: user.username,
     updatedAt: user.updatedAt
   }
+
   selectStatus.value = user.status
   showModal.value = true
 }
-
 
 export function handleSubmitFn(
   newUser: any,
@@ -69,7 +71,6 @@ export function handleSubmitFn(
   statusError: Ref<string>,
   closeCreateModal: () => void
 ) {
-  
   if (!newUser.firstName.trim()) {
     firstNameError.value = 'First name is required'
     return
@@ -87,27 +88,27 @@ export function handleSubmitFn(
     return
   }
 
-  const fullName = `${newUser.firstName} ${newUser.lastName}`
-
   const newUserData: User = {
-    id: newUser.id || crypto.randomUUID(), // 
+    id: newUser.id || crypto.randomUUID(),
     username: newUser.username,
-    fullName,
+    firstName: newUser.firstName.trim(),
+    lastName: newUser.lastName.trim(),
     status: newUser.status,
-    updatedAt: newUser.updatedAt
+    updatedAt: formatNow()
   }
 
   const index = users.value.findIndex(user => user.id === newUserData.id)
 
   if (index !== -1) {
-    users.value[index] = newUserData // update
+    users.value[index] = newUserData
   } else {
-    users.value.push(newUserData) // create
+    users.value.push(newUserData)
   }
 
   localStorage.setItem('users', JSON.stringify(users.value))
   closeCreateModal()
 }
+
 
 
 export function toggleFiltersFn(showFilters: Ref<boolean>) {
