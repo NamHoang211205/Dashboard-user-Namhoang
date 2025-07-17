@@ -71,26 +71,18 @@ export function handleSubmitFn(
   statusError: Ref<string>,
   closeCreateModal: () => void
 ) {
-  if (!newUser.firstName.trim()) {
-    firstNameError.value = 'First name is required'
-    return
-  }
-  if (!newUser.lastName.trim()) {
-    lastNameError.value = 'Last name is required'
-    return
-  }
-  if (!newUser.username.trim()) {
-    usernameError.value = 'Username is required'
-    return
-  }
-  if (!newUser.status || newUser.status === 'Choose status') {
-    statusError.value = 'Status is required'
-    return
+  const isFirstNameValid = validateFirstName(newUser.firstName, firstNameError)
+  const isLastNameValid = validateLastName(newUser.lastName, lastNameError)
+  const isUsernameValid = validateUsername(newUser.username, usernameError)
+  const isStatusValid = validateStatus(newUser.status, statusError)
+
+  if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isStatusValid) {
+    return // stop submission if any validation fails
   }
 
   const newUserData: User = {
     id: newUser.id || crypto.randomUUID(),
-    username: newUser.username,
+    username: newUser.username.trim(),
     firstName: newUser.firstName.trim(),
     lastName: newUser.lastName.trim(),
     status: newUser.status,
