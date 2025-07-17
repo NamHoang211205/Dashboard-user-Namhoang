@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue'
-import type { Ref } from 'vue'
 import {
   validateFirstName,
   validateLastName,
   validateUsername,
-  validateStatus
+  validateStatus,
+  validateEmailDomain
 } from '../utils/Validation.ts'
 
 const props = defineProps<{
@@ -15,12 +15,10 @@ const props = defineProps<{
     firstName: string
     lastName: string
     username: string
+    email?: string 
     updatedAt: string
   }
   selectStatus: string
-  firstNameError: string
-  lastNameError: string
-  usernameError: string
   closeCreateModal: () => void
 }>()
 
@@ -31,10 +29,18 @@ const localForm = reactive({
   firstName: '',
   lastName: '',
   username: '',
+  email: '',
 })
 
 const showUpdatedAt = ref(false)
 const updatedAtText = ref('')
+
+
+const firstNameError = ref("")
+const lastNameError = ref("")
+const usernameError = ref("")
+const statusError = ref("")
+const emailError = ref("")
 
 watch(
   () => props.showModal,
@@ -44,14 +50,17 @@ watch(
       localForm.firstName = props.form.firstName
       localForm.lastName = props.form.lastName
       localForm.username = props.form.username
+      localForm.email = props.form.email || '' 
 
-      if (props.form.updatedAt) {
-        updatedAtText.value = props.form.updatedAt
-        showUpdatedAt.value = true
-      } else {
-        updatedAtText.value = ''
-        showUpdatedAt.value = false
-      }
+      updatedAtText.value = props.form.updatedAt || ''
+      showUpdatedAt.value = !!props.form.updatedAt
+
+
+      firstNameError.value = ''
+      lastNameError.value = ''
+      usernameError.value = ''
+      emailError.value = ''
+      statusError.value = ''
     }
   },
   { immediate: true }
@@ -68,9 +77,17 @@ function formatDate(date: Date): string {
 }
 
 function handleLocalSave() {
+  const isFirstNameValid = validateFirstName(localForm.firstName, firstNameError)
+  const isLastNameValid = validateLastName(localForm.lastName, lastNameError)
+  const isUsernameValid = validateUsername(localForm.username, usernameError)
+  const isStatusValid = validateStatus(props.selectStatus, statusError)
+  const isEmailValid = validateEmailDomain(localForm.email, emailError)
+
+  if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isStatusValid) return
+
   emit('submit', {
     ...localForm,
-    id: localForm.id || crypto.randomUUID(), // ✅ Tạo id nếu chưa có
+    id: localForm.id || crypto.randomUUID(),
     status: props.selectStatus,
     updatedAt: formatDate(new Date()),
   })
@@ -91,17 +108,23 @@ function handleLocalSave() {
         <div>
           <label class="block text-sm font-medium mb-1">Last Name <span class="text-red-500">*</span></label>
           <input v-model="localForm.lastName" class="w-full border rounded px-3 py-2" />
-          <p class="text-red-500 text-sm">{{ props.lastNameError }}</p>
+          <p class="text-red-500 text-sm">{{ lastNameError }}</p>
         </div>
         <div>
           <label class="block text-sm font-medium mb-1">First Name <span class="text-red-500">*</span></label>
           <input v-model="localForm.firstName" class="w-full border rounded px-3 py-2" />
-          <p class="text-red-500 text-sm">{{ props.firstNameError }}</p>
+          <p class="text-red-500 text-sm">{{ firstNameError }}</p>
         </div>
         <div class="col-span-2">
           <label class="block text-sm font-medium mb-1">Username <span class="text-red-500">*</span></label>
           <input v-model="localForm.username" class="w-full border rounded px-3 py-2" />
-          <p class="text-red-500 text-sm">{{ props.usernameError }}</p>
+          <p class="text-red-500 text-sm">{{ usernameError }}</p>
+        </div>
+        <div class="col-span-2">
+          <label class="block text-sm font-medium mb-1">Email <span class="text-red-500">*</span></label>
+          <input v-model="localForm.email" type="email" class="w-full border rounded px-3 py-2" />
+          <p class="text-red-500 text-sm">{{ emailError }}</p>
+
         </div>
         <div class="col-span-2">
           <label class="block text-sm font-medium mb-1">Status <span class="text-red-500">*</span></label>
@@ -115,9 +138,9 @@ function handleLocalSave() {
             <option>Pending</option>
             <option>Activation expired</option>
           </select>
+          <p class="text-red-500 text-sm">{{ statusError }}</p>
         </div>
 
-        <!-- ✅ Hiển thị updatedAt chỉ khi có -->
         <div class="col-span-2" v-if="showUpdatedAt">
           <label class="block text-sm font-medium mb-1">Updated At</label>
           <input
@@ -140,4 +163,3 @@ function handleLocalSave() {
     </div>
   </div>
 </template>
-

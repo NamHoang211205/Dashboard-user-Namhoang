@@ -4,7 +4,8 @@ import {
   validateFirstName,
   validateLastName,
   validateUsername,
-  validateStatus
+  validateStatus,
+  validateEmailDomain
 } from '../utils/Validation.ts'
 
 
@@ -13,6 +14,7 @@ export interface User {
   username: string
   firstName: string
   lastName: string
+  email: string
   status: string
   updatedAt: string
 }
@@ -36,12 +38,14 @@ export function closeCreateModalFn(
   showModal: Ref<boolean>,
   firstNameError: Ref<string>,
   lastNameError: Ref<string>,
-  usernameError: Ref<string>
+  usernameError: Ref<string>,
+  statusError: Ref<string>
 ) {
   showModal.value = false
   firstNameError.value = ''
   lastNameError.value = ''
   usernameError.value = ''
+  statusError.value = ''
 }
 
 export function handleEditFn(
@@ -68,15 +72,18 @@ export function handleSubmitFn(
   firstNameError: Ref<string>,
   lastNameError: Ref<string>,
   usernameError: Ref<string>,
+  emailError: Ref<string>,
   statusError: Ref<string>,
   closeCreateModal: () => void
 ) {
   const isFirstNameValid = validateFirstName(newUser.firstName, firstNameError)
   const isLastNameValid = validateLastName(newUser.lastName, lastNameError)
   const isUsernameValid = validateUsername(newUser.username, usernameError)
+  const isEmailValid = validateEmailDomain(newUser.email, emailError)
   const isStatusValid = validateStatus(newUser.status, statusError)
 
-  if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isStatusValid) {
+
+  if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isEmailValid || !isStatusValid) {
     return // stop submission if any validation fails
   }
 
@@ -85,6 +92,7 @@ export function handleSubmitFn(
     username: newUser.username.trim(),
     firstName: newUser.firstName.trim(),
     lastName: newUser.lastName.trim(),
+    email: newUser.email.trim(),
     status: newUser.status,
     updatedAt: formatNow()
   }

@@ -19,12 +19,16 @@ import {
 } from '../utils/Function.ts' 
 
 const showModal = ref(false)
-const form = ref({ id: '', firstName: '', lastName: '', username: '', updatedAt: '' })
+const form = ref({ id: '', firstName: '', lastName: '', username: '', email:'', updatedAt: '' })
 const selectStatus = ref('Choose status')
+
+
 const firstNameError = ref('')
 const lastNameError = ref('')
 const usernameError = ref('')
+const emailError = ref('')
 const statusError = ref('')
+
 const showFilters = ref(true)
 const confirmActiveVisible = ref(false)
 const selectedUserForActive = ref<User | null>(null)
@@ -38,7 +42,7 @@ function openCreateModal() {
 }
 
 function closeCreateModal() {
-  closeCreateModalFn(showModal, firstNameError, lastNameError, usernameError)
+  closeCreateModalFn(showModal, firstNameError, lastNameError, usernameError, statusError)
 }
 
 function handleEdit(user: User) {
@@ -52,6 +56,7 @@ function handleSubmit(newUser: any) {
     firstNameError,
     lastNameError,
     usernameError,
+    emailError,
     statusError,
     closeCreateModal 
   )
@@ -142,9 +147,19 @@ onMounted(() => {
     <UserTable :users="users" @edit="handleEdit" @deleteAccount="handleDeleteRequest" @active="handleActive"
       @lock="handleLock" />
 
-    <UserModal :showModal="showModal" :form="form" :selectStatus="selectStatus" :firstNameError="firstNameError"
-      :lastNameError="lastNameError" :usernameError="usernameError" :closeCreateModal="closeCreateModal" :statusError="statusError"
-      @submit="handleSubmit" @update:selectStatus="handleSelectStatus" />
+    <UserModal
+      :showModal="showModal"
+      :form="form"
+      :selectStatus="selectStatus"
+      :closeCreateModal="closeCreateModal"
+      :firstNameError="firstNameError"
+      :lastNameError="lastNameError"
+      :usernameError="usernameError"
+      :emailError="emailError"
+      :statusError="statusError"
+      @submit="handleSubmit"
+      @update:selectStatus="handleSelectStatus"
+    />
 
     <!-- Confirm Delete Modal -->
     <ConfirmModal :visible="showConfirmModal" @confirm="confirmDelete" @cancel="showConfirmModal = false" />

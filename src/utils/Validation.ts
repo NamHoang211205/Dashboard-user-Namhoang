@@ -75,6 +75,9 @@ export function validateUsername(username: string, errorRef: Ref<string>): boole
   if (!username.trim()) {
     errorRef.value = 'Username is required'
     return false
+  } else if (username.includes(' ')) {
+    errorRef.value = 'Username cannot contains spaces.'
+    return false
   }
   errorRef.value = ''
   return true
