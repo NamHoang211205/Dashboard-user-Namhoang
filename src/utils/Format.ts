@@ -11,3 +11,4 @@ export function formatNow (): string {
 
   return `${year}/${month}/${day} ${hour}:${minute}:${second}`
 }
+
