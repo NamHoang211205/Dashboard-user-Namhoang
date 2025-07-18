@@ -41,13 +41,15 @@ export function validateEmailDomain(email: string, errorRef: Ref<string>): boole
 
 //  Function to validate a name field 
 export function validateFirstName(value: string, errorRef: Ref<string>): boolean {
+  const regex = /^[\p{L}\s]+$/u;
+
   if (!value.trim()) {
     errorRef.value = 'First name is required.'
     return false
   } else if (/^\s/.test(value)) {
     errorRef.value = 'First name cannot start with a space.'
     return false
-  } else if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(value)) {
+  } else if (!regex.test(value)) {
     errorRef.value = 'First name can only contain letters and single spaces between words.'
     return false
   }
@@ -56,13 +58,14 @@ export function validateFirstName(value: string, errorRef: Ref<string>): boolean
 }
 
 export function validateLastName(value: string, errorRef: Ref<string>): boolean {
+  const regex = /^[\p{L}\s]+$/u;
   if (!value.trim()) {
     errorRef.value = 'Last name is required.'
     return false
   } else if (/^\s/.test(value)) {
     errorRef.value = 'Last name cannot start with a space.'
     return false
-  }  else if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(value)) {
+  }  else if (!regex.test(value)) {
     errorRef.value = 'Last name can only contain letters and single spaces between words.'
     return false
   }
@@ -81,6 +84,21 @@ export function validateUsername(username: string, errorRef: Ref<string>): boole
   }
   errorRef.value = ''
   return true
+}
+
+// Function to validate an email address
+export function validateEmail(email: string, errorRef: Ref<string>): boolean {
+  if (!email.trim()) {
+    errorRef.value = 'Email is required.'
+    return false
+  }
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (!emailRegex.test(email)) {
+    errorRef.value = 'Please enter a valid email address.'
+    return false
+  }
+  errorRef.value = ''
+  return true 
 }
 
 // Function to validate a status field

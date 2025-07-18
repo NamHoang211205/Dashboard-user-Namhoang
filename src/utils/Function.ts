@@ -5,7 +5,7 @@ import {
   validateLastName,
   validateUsername,
   validateStatus,
-  validateEmailDomain
+  validateEmail
 } from '../utils/Validation'
 
 
@@ -58,6 +58,7 @@ export function handleEditFn(
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
+    email: user.email,
     username: user.username,
     updatedAt: user.updatedAt
   }
@@ -79,7 +80,7 @@ export function handleSubmitFn(
   const isFirstNameValid = validateFirstName(newUser.firstName, firstNameError)
   const isLastNameValid = validateLastName(newUser.lastName, lastNameError)
   const isUsernameValid = validateUsername(newUser.username, usernameError)
-  const isEmailValid = validateEmailDomain(newUser.email, emailError)
+  const isEmailValid = validateEmail(newUser.email, emailError)
   const isStatusValid = validateStatus(newUser.status, statusError)
 
 

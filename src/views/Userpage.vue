@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import UserTable from '../components/UserTable.vue'
 import UserModal from '../components/UserModal.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
@@ -14,9 +14,10 @@ import {
   handleActiveFn,
   confirmActiveFn,
   cancelActiveFn,
-  handleLockFn,
-  type User
-} from '../utils/Function' 
+  handleLockFn
+} from '../utils/Function'
+
+import type { User } from '../utils/Function'
 
 const showModal = ref(false)
 const form = ref({ id: '', firstName: '', lastName: '', username: '', email:'', updatedAt: '' })
@@ -36,6 +37,34 @@ const users = ref<User[]>([])
 const showConfirmModal = ref(false)
 const selectedUser = ref<User | null>(null)
 const lockedUser = ref<User | null>(null)
+
+const filterEmail = ref('')
+const filterFullName = ref('')
+const filterDateRange = ref('')
+const filterStatus = ref('Choose status')
+const filteredUsers = computed(() => {
+  return users.value.filter(user => {
+    // Filtering email
+    const emailMatch = filterEmail.value.trim() === '' || user.username.includes(filterEmail.value.trim())
+
+    // Filtering full name
+    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase()
+    const fullNameMatch = filterFullName.value.trim() === '' || fullName.includes(filterFullName.value.trim().toLowerCase())
+
+    // Filtering status
+    const statusMatch = filterStatus.value === 'Choose status' || user.status === filterStatus.value
+
+    // Filter Date
+    let dateMatch = true
+    if (filterDateRange.value.includes('-')) {
+      const [from, to] = filterDateRange.value.split('-').map(s => s.trim())
+      const updatedAt = user.updatedAt.split(' ')[0] // only take the date part
+      dateMatch = (!from || updatedAt >= from) && (!to || updatedAt <= to)
+    }
+
+    return emailMatch && fullNameMatch && statusMatch && dateMatch
+  })
+})
 
 function openCreateModal() {
   openCreateModalFn(showModal, form, selectStatus)
@@ -133,10 +162,10 @@ onMounted(() => {
     </div>
 
     <div v-if="showFilters" class="grid grid-cols-4 gap-4 mb-6">
-      <input type="text" placeholder="Enter email address" class="border px-3 py-2 rounded w-full" />
-      <input type="text" placeholder="Enter full name" class="border px-3 py-2 rounded w-full" />
-      <input type="text" placeholder="From date - To date" class="border px-3 py-2 rounded w-full" />
-      <select class="border px-3 py-2 rounded w-full">
+      <input v-model="filterEmail" type="text" placeholder="Enter email address" class="border px-3 py-2 rounded w-full" />
+      <input v-model="filterFullName" type="text" placeholder="Enter full name" class="border px-3 py-2 rounded w-full" />
+      <input v-model="filterDateRange" type="text" placeholder="From date - To date" class="border px-3 py-2 rounded w-full" />
+      <select v-model="filterStatus" class="border px-3 py-2 rounded w-full">
         <option>Choose status</option>
         <option>Active</option>
         <option>Pending</option>
@@ -144,7 +173,7 @@ onMounted(() => {
       </select>
     </div>
 
-    <UserTable :users="users" @edit="handleEdit" @deleteAccount="handleDeleteRequest" @active="handleActive"
+    <UserTable :users="filteredUsers" @edit="handleEdit" @deleteAccount="handleDeleteRequest" @active="handleActive"
       @lock="handleLock" />
 
     <UserModal

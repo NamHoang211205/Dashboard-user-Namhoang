@@ -5,7 +5,7 @@ import {
   validateLastName,
   validateUsername,
   validateStatus,
-  validateEmailDomain
+  validateEmail
 } from '../utils/Validation'
 
 const props = defineProps<{
@@ -81,7 +81,7 @@ function handleLocalSave() {
   const isLastNameValid = validateLastName(localForm.lastName, lastNameError)
   const isUsernameValid = validateUsername(localForm.username, usernameError)
   const isStatusValid = validateStatus(props.selectStatus, statusError)
-  const isEmailValid = validateEmailDomain(localForm.email, emailError)
+  const isEmailValid = validateEmail(localForm.email, emailError)
 
   if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isEmailValid || !isStatusValid) return
 
