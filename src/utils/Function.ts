@@ -6,7 +6,7 @@ import {
   validateUsername,
   validateStatus,
   validateEmailDomain
-} from '../utils/Validation.ts'
+} from '../utils/Validation'
 
 
 export interface User {

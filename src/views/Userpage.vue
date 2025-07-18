@@ -16,7 +16,7 @@ import {
   cancelActiveFn,
   handleLockFn,
   type User
-} from '../utils/Function.ts' 
+} from '../utils/Function' 
 
 const showModal = ref(false)
 const form = ref({ id: '', firstName: '', lastName: '', username: '', email:'', updatedAt: '' })

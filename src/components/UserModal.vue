@@ -6,7 +6,7 @@ import {
   validateUsername,
   validateStatus,
   validateEmailDomain
-} from '../utils/Validation.ts'
+} from '../utils/Validation'
 
 const props = defineProps<{
   showModal: boolean
@@ -83,7 +83,7 @@ function handleLocalSave() {
   const isStatusValid = validateStatus(props.selectStatus, statusError)
   const isEmailValid = validateEmailDomain(localForm.email, emailError)
 
-  if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isStatusValid) return
+  if (!isFirstNameValid || !isLastNameValid || !isUsernameValid || !isEmailValid || !isStatusValid) return
 
   emit('submit', {
     ...localForm,
