@@ -15,7 +15,7 @@ const props = defineProps<{
     firstName: string
     lastName: string
     username: string
-    email?: string 
+    email: string 
     updatedAt: string
   }
   selectStatus: string

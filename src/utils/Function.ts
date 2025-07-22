@@ -9,6 +9,7 @@ import {
 } from '../utils/Validation'
 
 
+// User object structure
 export interface User {
   id: string
   username: string
@@ -30,6 +31,7 @@ export function openCreateModalFn(
     firstName: '',
     lastName: '',
     username: '',
+    email: '',
     updatedAt: ''
   }
   selectStatus.value = 'Choose status'
@@ -107,6 +109,7 @@ export function handleSubmitFn(
   }
 
   localStorage.setItem('users', JSON.stringify(users.value))
+  console.log('User data saved:', newUserData)
   closeCreateModal()
 }
 
