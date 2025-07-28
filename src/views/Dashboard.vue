@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import Filter from '../components/Filter.vue'
-import UserTable from '../components/UserTable.vue'
 
 const router = useRouter()
 
@@ -55,14 +53,14 @@ onMounted(() => {
   
   function goToEditPage() {
     console.log('Navigating to edit page...')
-    router.push('/edit');
+    router.push('/editcompany');
   }
 </script>
 
 <template>
   <div class="p-8 bg-white shadow rounded-lg">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-semibold text-gray-900">Company Information</h2>
+      <h2 class="text-2xl font-bold">Company Information</h2>
      <button @click="goToEditPage"
         class="flex items-center gap-2 px-4 py-2 text-sm text-blue-600 border border-gray-600 rounded hover:bg-blue-50">
         <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg">
