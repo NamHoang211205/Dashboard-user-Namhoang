@@ -3,7 +3,7 @@ import { ref, onMounted, computed, onUnmounted } from 'vue'
 import EmployeeTable from '../components/EmployeeTable.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
 import { formatDateToMMDDYYYY } from '../utils/Format'
-import { openCreateModalFn } from '../utils/Function'
+import router from '../router'
 
 export interface Employee {
   employeeCode: string
@@ -21,6 +21,10 @@ const employees = ref<Employee[]>([])
 const filterEmail = ref('')
 const filterFullName = ref('')
 const filterStatus = ref('Choose status')
+const filterEmployeeCode = ref('')
+const filterDepartment = ref('Choose working department')
+const filterJobTitle = ref('')
+const filterPosition = ref('')
 const showFilters = ref(true)
 
 const showDateDropdown = ref(false)
@@ -96,8 +100,8 @@ onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside)
 })
 
-function openCreateModal() {
-  openCreateModalFn(showConfirmModal)
+function goToCreatePage() {
+  router.push('/employee/createemployee')
 }
 </script>
 
@@ -110,17 +114,38 @@ function openCreateModal() {
           class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">
           Filters
         </button>
-        <button @click="openCreateModal" class="px-3 py-1 border text-sm text-blue-600 border-blue-600 rounded hover:bg-blue-50">
+        <button @click="goToCreatePage"
+          class="px-3 py-1 border text-sm text-blue-600 border-blue-600 rounded hover:bg-blue-50">
           + Create New
         </button>
       </div>
     </div>
 
     <div v-if="showFilters" class="grid grid-cols-4 gap-4 mb-6">
-      <input v-model="filterEmail" type="text" placeholder="Enter email address"
-        class="border px-3 py-2 rounded w-full text-sm" />
-      <input v-model="filterFullName" type="text" placeholder="Enter full name"
-        class="border px-3 py-2 rounded w-full text-sm" />
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Employee Code</label>
+        <input v-model="filterEmployeeCode" type="text" placeholder="Enter employee code"
+          class="border px-3 py-2 rounded w-full text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+        <input v-model="filterFullName" type="text" placeholder="Enter full name"
+          class="border px-3 py-2 rounded w-full text-sm" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+        <input v-model="filterEmail" type="text" placeholder="Enter email address"
+          class="border px-3 py-2 rounded w-full text-sm" />
+      </div>
+      <div>
+       <label class="block text-sm font-medium text-gray-700 mb-1">Working Department</label>
+      <select v-model="filterDepartment" class="border px-3 py-2 rounded w-full text-sm text-gray-500" Working Department>
+        <option disabled>Choose working department</option>
+        <option>Working</option>
+        <option>Resigned</option>
+
+      </select>
+    </div>
       <div class="relative w-full date-range-container">
         <input type="text" :value="formattedRange || ''" readonly placeholder="Probation date range"
           class="border px-3 py-2 rounded w-full text-sm bg-white" />
@@ -137,7 +162,7 @@ function openCreateModal() {
         </div>
       </div>
       <select v-model="filterStatus" class="border px-3 py-2 rounded w-full text-sm text-gray-500">
-        <option>Choose status</option>
+        <option disabled>Choose status</option>
         <option>Working</option>
         <option>Resigned</option>
       </select>

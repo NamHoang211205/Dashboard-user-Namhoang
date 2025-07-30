@@ -7,34 +7,29 @@ import {
   validateStatus,
   validateEmail
 } from '../utils/Validation'
+import type { UserForm } from '../utils/types'
 
 const props = defineProps<{
   showModal: boolean
-  form: {
-    id?: string
-    firstName: string
-    lastName: string
-    username: string
-    email: string 
-    updatedAt: string
-  }
+  form: UserForm
   selectStatus: string
   closeCreateModal: () => void
 }>()
 
 const emit = defineEmits(['update:selectStatus', 'submit'])
 
-const localForm = reactive({
-  id: '', 
+const localForm: UserForm = reactive({
+  id: '',
   firstName: '',
   lastName: '',
   username: '',
   email: '',
+  updatedAt: '',
+  status: 'Pending' // Default value for status
 })
 
 const showUpdatedAt = ref(false)
 const updatedAtText = ref('')
-
 
 const firstNameError = ref("")
 const lastNameError = ref("")
@@ -46,15 +41,9 @@ watch(
   () => props.showModal,
   (visible) => {
     if (visible) {
-      localForm.id = props.form.id || '' 
-      localForm.firstName = props.form.firstName
-      localForm.lastName = props.form.lastName
-      localForm.username = props.form.username
-      localForm.email = props.form.email || '' 
-
+      Object.assign(localForm, props.form)
       updatedAtText.value = props.form.updatedAt || ''
       showUpdatedAt.value = !!props.form.updatedAt
-
 
       firstNameError.value = ''
       lastNameError.value = ''
@@ -124,7 +113,6 @@ function handleLocalSave() {
           <label class="block text-sm font-medium mb-1">Email <span class="text-red-500">*</span></label>
           <input v-model="localForm.email" type="email" class="w-full border rounded px-3 py-2" />
           <p class="text-red-500 text-sm">{{ emailError }}</p>
-
         </div>
         <div class="col-span-2">
           <label class="block text-sm font-medium mb-1">Status <span class="text-red-500">*</span></label>

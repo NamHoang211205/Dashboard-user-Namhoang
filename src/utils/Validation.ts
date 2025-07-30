@@ -110,3 +110,39 @@ export function validateStatus(status: string, errorRef: Ref<string>): boolean {
   errorRef.value = ''
   return true
 }
+
+// Function to validate a telephone number
+export function validatePhone (tel: string, errorRef: Ref<string>): boolean {
+  if (!tel.trim()) {
+    errorRef.value = 'Telephone number is required.'
+    return false
+  } else if (!/^\d{8,15}$/.test(tel)) {
+    errorRef.value = 'Telephone number must be between 8 and 15 digits.'
+    return false
+  }
+  errorRef.value = ''
+  return true
+}
+
+// Function to validate date fields
+export function validateDate(date: string, errorRef: Ref<string>, field = 'Date'): boolean {
+  if (!date) {
+    errorRef.value = `${field} is required.`
+    return false
+  }
+  errorRef.value = ''
+  return true
+}
+
+
+// Function to validate a dropdown selection
+export function validateDropdown(value: string, errorRef: Ref<string>, field = 'Selection'): boolean {
+  if (!value || value === `Choose ${field.toLowerCase()}`) {
+    errorRef.value = `${field} is required.`
+    return false
+  }
+  errorRef.value = ''
+  return true
+}
+
+

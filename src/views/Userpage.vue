@@ -22,7 +22,7 @@ import type { User } from '../utils/Function'
 import { formatDateToMMDDYYYY } from '../utils/Format'
 
 const showModal = ref(false)
-const form = ref({ id: '', firstName: '', lastName: '', username: '', email: '', updatedAt: '' })
+const form = ref({ id: '', firstName: '', lastName: '', username: '', email: '', updatedAt: '', status: 'Choose status' })
 const selectStatus = ref('Choose status')
 
 const firstNameError = ref('')
@@ -153,10 +153,10 @@ function handleSelectStatus(newStatus: string) {
   selectStatus.value = newStatus
 }
 
-function goToEmployeepage () {
-    console.log('Navigating to Employee page')
-    router.push ('/employee')
-}
+// function goToEmployeepage () {
+//     console.log('Navigating to Employee page')
+//     router.push ('/employee')
+// }
 </script>
 
 <template>
