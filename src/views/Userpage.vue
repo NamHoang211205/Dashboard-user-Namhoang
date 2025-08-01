@@ -153,10 +153,6 @@ function handleSelectStatus(newStatus: string) {
   selectStatus.value = newStatus
 }
 
-// function goToEmployeepage () {
-//     console.log('Navigating to Employee page')
-//     router.push ('/employee')
-// }
 </script>
 
 <template>

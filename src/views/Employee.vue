@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted } from 'vue'
+import { ref, onMounted, computed, onUnmounted, watchEffect } from 'vue'
 import EmployeeTable from '../components/EmployeeTable.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
 import { formatDateToMMDDYYYY } from '../utils/Format'
@@ -82,7 +82,7 @@ const filteredEmployees = computed(() => {
   })
 })
 
-onMounted(() => {
+watchEffect(() => {
   const saved = localStorage.getItem('employees')
   if (saved) {
     try {
@@ -92,8 +92,6 @@ onMounted(() => {
       employees.value = []
     }
   }
-
-  window.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
@@ -103,6 +101,8 @@ onUnmounted(() => {
 function goToCreatePage() {
   router.push('/employee/createemployee')
 }
+
+window.addEventListener('click', handleClickOutside)
 </script>
 
 <template>

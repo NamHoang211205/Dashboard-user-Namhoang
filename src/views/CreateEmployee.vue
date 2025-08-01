@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { EmployeeForm } from '../utils/types'
+import DepartmentTree from '../components/DepartmentTree.vue'
 import {
   validateFirstName,
   validateLastName,
@@ -28,7 +29,6 @@ const gradeError = ref('')
 const probationDateError = ref('')
 const officialDateError = ref('')
 
-
 const form = reactive<EmployeeForm>({
   id: '',
   firstName: '',
@@ -48,6 +48,31 @@ const form = reactive<EmployeeForm>({
   avatar: ''
 })
 
+const departmentOptions = [
+  {
+    label: 'LDCC Vietnam',
+    children: [
+      {
+        label: 'Hanoi Branch',
+        children: [
+          { label: 'Sales Division' },
+          { label: 'Platform DEV. Devision' },
+          { label: 'Devision 03' },
+          { label: 'Devision 04' },
+          { label: 'Devision 05' }
+        ]
+      },
+      {
+        label: 'HCM Branch',
+        children: [
+          { label: 'Sales Division' },
+          { label: 'Platform DEV. Devision' }
+        ]
+      }
+    ]
+  }
+]
+
 function handleBack() {
   router.push('/employee')
 }
@@ -56,7 +81,6 @@ function handleSave() {
   const isValid =
     validateFirstName(form.firstName, firstNameError) &&
     validateLastName(form.lastName, lastNameError) &&
-    validateUsername(form.username, usernameError) &&
     validateEmail(form.email, emailError) &&
     validatePhone(form.tel, telError) &&
     validatePhone(form.mobile, mobileError) &&
@@ -69,21 +93,38 @@ function handleSave() {
     validateDate(form.probationDate, probationDateError, 'Probation Date') &&
     validateDate(form.officialDate, officialDateError, 'Official Date')
 
-  if (!isValid) return
+  if (!isValid) {
+    console.warn('❌ Validation failed')
+    return
+  }
+
   const saved = localStorage.getItem('employees')
   const employees = saved ? JSON.parse(saved) : []
 
-  // Create a new employee object
   const newEmployee = {
-    ...form,
-    id: form.id || crypto.randomUUID()
+    id: form.id || crypto.randomUUID(),
+    firstName: form.firstName,
+    lastName: form.lastName,
+    email: form.email,
+    tel: form.tel,
+    mobile: form.mobile,
+    dob: form.dob,
+    gender: form.gender,
+    department: form.department,
+    jobTitle: form.jobTitle,
+    position: form.position,
+    grade: form.grade,
+    probationDate: form.probationDate,
+    officialDate: form.officialDate,
+    avatar: form.avatar,
+    updatedAt: new Date().toISOString(),
+    status: 'Working'
   }
 
   employees.push(newEmployee)
   localStorage.setItem('employees', JSON.stringify(employees))
+
   router.push('/employee')
-
-
 }
 
 function handleAvatarChange(event: Event) {
@@ -93,6 +134,7 @@ function handleAvatarChange(event: Event) {
   }
 }
 </script>
+
 
 <template>
   <div class="p-6 bg-white min-h-screen">
@@ -165,14 +207,13 @@ function handleAvatarChange(event: Event) {
     <!-- Work Info -->
     <h2 class="text-lg font-semibold mb-2 mt-8">Work Information</h2>
     <div class="grid grid-cols-3 gap-4 mb-6">
-      <div>
+      <div class="relative">
         <label class="block text-sm font-medium mb-1">Working Department</label>
-        <select v-model="form.department" class="input-field">
-          <option disabled value="">Choose working department</option>
-          <option>Platform DEV</option>
-          <option>HR</option>
-        </select>
-        <p class="text-red-500 text-sm">{{ departmentError }}</p>
+        <input v-model="form.department" class="input-field border-green-500" placeholder="Choose working department"
+          readonly />
+        <div class="absolute z-10 bg-white border rounded mt-1 w-full max-h-64 overflow-y-auto">
+          <DepartmentTree :items="departmentOptions" v-model:selected="form.department" />
+        </div>
       </div>
 
       <!-- Job Info -->
@@ -228,9 +269,17 @@ function handleAvatarChange(event: Event) {
     </button>
 
     <!-- Actions -->
-    <div class="mt-6 flex justify-between">
-      <button @click="handleBack" class="px-4 py-2 rounded border text-gray-700 hover:bg-gray-100">Back</button>
-      <button @click="handleSave" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Save</button>
+    <!-- Actions -->
+    <div class="mt-6 flex justify-center gap-4">
+      <button @click="handleBack" class="px-4 py-2 rounded border text-blue-600 border-blue-600 hover:bg-blue-50">
+        Back
+      </button>
+      <button @click="handleSave" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+        Save
+      </button>
+      <button class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">
+        Save, and Add Permission
+      </button>
     </div>
   </div>
 </template>
