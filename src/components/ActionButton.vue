@@ -1,18 +1,17 @@
 <script setup lang="ts">
-
 const props = defineProps<{
-  isLockedDisabled: boolean
-}>();
+    isLockedDisabled?: boolean
+}>()
+
 const emit = defineEmits<{
-  (e: 'edit'): void
-  (e: 'deleteAccount'): void
-  (e: 'activeAccount'): void
-  (e: 'lock'): void
+    (e: 'edit'): void
+    (e: 'deleteAccount'): void
 }>()
 </script>
 
 <template>
     <div class="flex items-center justify-center gap-3 text-gray-500">
+        <!-- Edit button -->
         <button @click="$emit('edit')" title="Edit" class="hover:text-blue-600">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -21,7 +20,8 @@ const emit = defineEmits<{
             </svg>
         </button>
 
-        <button @click="$emit('deleteAccount')" title="Delete Account" class="hover:text-blue-600">
+        <!-- Delete button (confirmation trigger) -->
+        <button @click="$emit('deleteAccount')" title="Delete" class="hover:text-red-600">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M1.41418 5.35449C1.52585 5.07786 1.84073 4.94453 2.11731 5.05566C2.39402 5.16717 2.5285 5.482 2.41711 5.75879C1.51583 7.99905 2.03568 10.5491 3.74231 12.2559C5.45282 13.9665 8.00604 14.4856 10.2472 13.5791C10.6855 13.4023 11.0961 13.1742 11.4777 12.9014L10.8712 12.9023H10.8702C10.5723 12.9023 10.3298 12.6614 10.3292 12.3633C10.3287 12.0647 10.5708 11.8218 10.8693 11.8213L12.9073 11.8184H12.9083C13.0515 11.8185 13.1889 11.8751 13.2902 11.9766L13.3575 12.0586C13.4165 12.147 13.4485 12.2515 13.4484 12.3594L13.4445 14.4609C13.4439 14.759 13.2022 15.0008 12.9044 15.001H12.9034C12.6049 15.0004 12.3629 14.7575 12.3634 14.459L12.3644 13.5869C11.9151 13.9401 11.4285 14.2378 10.9064 14.4727L10.6525 14.5811C9.78912 14.9305 8.88612 15.1005 7.99133 15.1006C6.14676 15.1006 4.3364 14.3792 2.97766 13.0205C0.964362 11.0071 0.351151 7.99824 1.41418 5.35547V5.35449Z"
@@ -31,44 +31,5 @@ const emit = defineEmits<{
                     fill="black" stroke="black" stroke-width="0.2" />
             </svg>
         </button>
-
-        <button @click="$emit('activeAccount')" title="active Account" class="hover:text-blue-600">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_177_2613)">
-                    <path
-                        d="M1.33447 8.00016C1.33447 11.6821 4.31924 14.6668 8.00114 14.6668C11.683 14.6668 14.6678 11.6821 14.6678 8.00016C14.6678 4.31826 11.683 1.3335 8.00114 1.3335C6.29369 1.3335 4.73615 1.97539 3.55669 3.03104M2.81595 1.3335V3.55572C2.81595 3.96482 3.1476 4.29646 3.55669 4.29646H5.77892"
-                        stroke="#181818" stroke-width="1.2" stroke-linecap="round" />
-                    <path
-                        d="M10.219 7.99597C10.219 9.22088 9.22607 10.2139 8.00112 10.2139C6.77612 10.2139 5.7832 9.22088 5.7832 7.99597C5.7832 6.77109 6.77612 5.7781 8.00112 5.7781C9.22607 5.7781 10.219 6.77109 10.219 7.99597Z"
-                        stroke="#181818" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                        d="M4.69275 13.1855C4.87013 11.5151 6.28351 10.2139 8.00088 10.2139C9.7183 10.2139 11.1317 11.5152 11.309 13.1855"
-                        stroke="#181818" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <defs>
-                    <clipPath id="clip0_177_2613">
-                        <rect width="16" height="16" fill="white" transform="translate(0.00109863)" />
-                    </clipPath>
-                </defs>
-            </svg>
-        </button>
-
-        <button @click="$emit('lock')" title="Lock/Unlock" class="hover:text-orange-500">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_177_2625)">
-                    <path
-                        d="M3.9989 6.66683V5.3335C3.9989 3.12683 4.66557 1.3335 7.9989 1.3335C11.3322 1.3335 11.9989 3.12683 11.9989 5.3335V6.66683M7.9989 12.3335C8.44093 12.3335 8.86485 12.1579 9.17741 11.8453C9.48997 11.5328 9.66557 11.1089 9.66557 10.6668C9.66557 10.2248 9.48997 9.80088 9.17741 9.48832C8.86485 9.17576 8.44093 9.00016 7.9989 9.00016C7.55687 9.00016 7.13295 9.17576 6.82039 9.48832C6.50783 9.80088 6.33223 10.2248 6.33223 10.6668C6.33223 11.1089 6.50783 11.5328 6.82039 11.8453C7.13295 12.1579 7.55687 12.3335 7.9989 12.3335Z"
-                        stroke="#F66A1C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path
-                        d="M11.3323 14.6665H4.66561C1.99894 14.6665 1.33228 13.9998 1.33228 11.3332V9.99984C1.33228 7.33317 1.99894 6.6665 4.66561 6.6665H11.3323C13.9989 6.6665 14.6656 7.33317 14.6656 9.99984V11.3332C14.6656 13.9998 13.9989 14.6665 11.3323 14.6665Z"
-                        stroke="#F66A1C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                </g>
-                <defs>
-                    <clipPath id="clip0_177_2625">
-                        <rect width="16" height="16" fill="white" transform="translate(-0.00109863)" />
-                    </clipPath>
-                </defs>
-            </svg>
-        </button>
     </div>
-</template> 
+</template>
